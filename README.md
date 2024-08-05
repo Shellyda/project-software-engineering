@@ -67,7 +67,7 @@ To run the platform locally, follow these steps:
     yarn install
 
     # For backend
-    cd ../backend
+    cd backend
     yarn install
     ```
 
@@ -79,7 +79,7 @@ To run the platform locally, follow these steps:
     yarn run dev
 
     # For backend
-    cd ../backend
+    cd backend
     yarn run start:dev
     ```
 
