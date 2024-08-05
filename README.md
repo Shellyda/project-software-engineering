@@ -1,8 +1,8 @@
 # Me passa a receita aí? (receita.ai) 🍴👩‍🍳👨‍🍳
 
 [![Status](https://img.shields.io/badge/status-active-success.svg)]()
-[![GitHub Issues](https://img.shields.io/github/issues/IF977/if977-project-standards.svg)](https://github.com/Shellyda/project-software-engineering/issues)
-[![GitHub Pull Requests](https://img.shields.io/github/issues-pr/IF977/if977-project-standards.svg)](https://github.com/Shellyda/project-software-engineering/pulls)
+[![GitHub Issues](https://img.shields.io/github/issues/Shellyda/project-software-engineering.svg)](https://github.com/Shellyda/project-software-engineering/issues)
+[![GitHub Pull Requests](https://img.shields.io/github/issues-pr/Shellyda/project-software-engineering.svg)](https://github.com/Shellyda/project-software-engineering/pulls)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](/LICENSE)
 
 Welcome to **Me passa a receita aí?** *(receita.ai)*, a platform where users can share their favorite recipes, leave comments, and rate recipes shared by others.
