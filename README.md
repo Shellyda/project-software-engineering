@@ -5,7 +5,7 @@
 [![GitHub Pull Requests](https://img.shields.io/github/issues-pr/IF977/if977-project-standards.svg)](https://github.com/Shellyda/project-software-engineering//pulls)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](/LICENSE)
 
-Welcome to **me passa a receita ai** *(receita.ai)*, a platform where users can share their favorite recipes, leave comments, and rate recipes shared by others.
+Welcome to **Me passa a receita aí?** *(receita.ai)*, a platform where users can share their favorite recipes, leave comments, and rate recipes shared by others.
 Our platform aims to create a vibrant community of food enthusiasts who can discover, share, and enjoy a wide variety of recipes.
 
 **obs.:** points with this emoji "🚧" on the side means the *work in progress* or *decision pending*
