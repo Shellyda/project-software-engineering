@@ -8,7 +8,7 @@
 Welcome to **Me passa a receita aí?** *(receita.ai)*, a platform where users can share their favorite recipes, leave comments, and rate recipes shared by others.
 Our platform aims to create a vibrant community of food enthusiasts who can discover, share, and enjoy a wide variety of recipes.
 
-**obs.:** points with this emoji "🚧" on the side means the *work in progress* or *decision pending*
+**obs.:** points with this emoji "🚧" on the side means *work in progress* or *decision pending*
 
 ## Table of Contents
 
