@@ -92,7 +92,7 @@ To run the platform locally, follow these steps:
 
 Once the platform is up and running, you can start exploring recipes, post your own, and interact with other users. Make sure to create an account to unlock all features.
 
-## Contact
+## Contributing
 
 We welcome contributions from the community. If you would like to contribute, please follow these steps:
 
@@ -106,7 +106,7 @@ We welcome contributions from the community. If you would like to contribute, pl
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more information.
 
-## Contributors
+## Contact
 - Alysson Ramos - ajsr@cin.ufpe.br
 - José Basílio - jbsn3@cin.ufpe.br
 - Shellyda Barbosa - sfsb2@cin.ufpe.br
