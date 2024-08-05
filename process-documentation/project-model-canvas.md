@@ -1,5 +1,5 @@
 
-# Project Model Canvas Template for Software Projects
+# Project Model Canvas
 
 ## 1. Objectives and Justifications
 **Description:** Create a platform called "Me passa a receita aí?" (receita.ai) where users can share, comment on, and rate recipes, creating a community of culinary enthusiasts. The project aims to facilitate the exchange of culinary knowledge and promote creativity in cooking.
