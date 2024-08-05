@@ -20,7 +20,7 @@ Our platform aims to create a vibrant community of food enthusiasts who can disc
 - [Usage](#usage)
 - [Contributing](#contributing)
 - [License](#license)
-- [Contributors](#contributors)
+- [Contact](#contact)
 
 ## Overview
 
@@ -92,7 +92,7 @@ To run the platform locally, follow these steps:
 
 Once the platform is up and running, you can start exploring recipes, post your own, and interact with other users. Make sure to create an account to unlock all features.
 
-## Contributing
+## Contact
 
 We welcome contributions from the community. If you would like to contribute, please follow these steps:
 
