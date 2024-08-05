@@ -24,7 +24,7 @@ Our platform aims to create a vibrant community of food enthusiasts who can disc
 
 ## Overview
 
-The **Me passa a receita aí?** platform allows users to explore a wide range of recipes shared by a community of food lovers. Users can contribute by sharing their own recipes, providing feedback through comments, and rating the recipes they try.
+**Me passa a receita aí?** platform allows users to explore a wide range of recipes shared by a community of food lovers. Users can contribute by sharing their own recipes, providing feedback through comments, and rating the recipes they try.
 
 ## Features
 
