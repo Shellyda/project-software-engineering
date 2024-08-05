@@ -64,11 +64,11 @@ To run the platform locally, follow these steps:
     ```bash
     # For frontend
     cd frontend
-    npm install
+    yarn install
 
     # For backend
     cd ../backend
-    npm install
+    yarn install
     ```
 
 3. **Start the development servers:**
@@ -76,11 +76,11 @@ To run the platform locally, follow these steps:
     ```bash
     # For frontend
     cd frontend
-    npm run dev
+    yarn run dev
 
     # For backend
     cd ../backend
-    npm run start:dev
+    yarn run start:dev
     ```
 
 4. **Access the platform:**
