@@ -6,6 +6,11 @@ module.exports = {
     extend: {
       fontFamily: {
         primary: ['var(--font-primary)']
+      },
+      colors: {
+        primary: '#FCD74F',
+        secondary: '#136640',
+        base: '#F4F0E0'
       }
     }
   },
