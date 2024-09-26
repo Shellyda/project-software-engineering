@@ -5,10 +5,10 @@
 [![GitHub Pull Requests](https://img.shields.io/github/issues-pr/Shellyda/project-software-engineering.svg)](https://github.com/Shellyda/project-software-engineering/pulls)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](/LICENSE)
 
-Welcome to **Me passa a receita aí?** *(receita.ai)*, a platform where users can share their favorite recipes, leave comments, and rate recipes shared by others.
+Welcome to **Me passa a receita aí?** _(receita.ai)_, a platform where users can share their favorite recipes, leave comments, and rate recipes shared by others.
 Our platform aims to create a vibrant community of food enthusiasts who can discover, share, and enjoy a wide variety of recipes.
 
-**obs.:** points with this emoji "🚧" on the side means *work in progress* or *decision pending*
+**obs.:** points with this emoji "🚧" on the side means _work in progress_ or _decision pending_
 
 ## Table of Contents
 
@@ -39,11 +39,12 @@ Our platform aims to create a vibrant community of food enthusiasts who can disc
 
 - **Frontend:** [Next.js](https://nextjs.org/)
 - **Backend:** [NestJS](https://nestjs.com/) 🚧
-- **Database:** *(e.g., PostgreSQL, MongoDB)* 🚧
-- **Authentication:** *(e.g., JWT, OAuth)* 🚧
-- **Hosting:** *(e.g., Vercel for frontend, AWS for backend)* 🚧
+- **Database:** _(e.g., PostgreSQL, MongoDB)_ 🚧
+- **Authentication:** _(e.g., JWT, OAuth)_ 🚧
+- **Hosting:** _(e.g., Vercel for frontend, AWS for backend)_ 🚧
 
 ## Prerequisites
+
 - [Node.js](https://nodejs.org/)
 - [yarn](https://yarnpkg.com/)
 - PostgreSQL (or your preferred database)
@@ -54,37 +55,37 @@ To run the platform locally, follow these steps:
 
 1. **Clone the repository:**
 
-    ```bash
-    git clone https://github.com/Shellyda/project-software-engineering.git
-    cd project-software-engineering
-    ```
+   ```bash
+   git clone https://github.com/Shellyda/project-software-engineering.git
+   cd project-software-engineering
+   ```
 
 2. **Install dependencies for the frontend and backend:**
 
-    ```bash
-    # For frontend
-    cd frontend
-    yarn install
+   ```bash
+   # For frontend
+   cd frontend
+   yarn install
 
-    # For backend
-    cd backend
-    yarn install
-    ```
+   # For backend
+   cd backend
+   yarn install
+   ```
 
 3. **Start the development servers:**
 
-    ```bash
-    # For frontend
-    cd frontend
-    yarn run dev
+   ```bash
+   # For frontend
+   cd frontend
+   yarn run dev
 
-    # For backend
-    cd backend
-    yarn run start:dev
-    ```
+   # For backend
+   cd backend
+   yarn run start:dev
+   ```
 
 4. **Access the platform:**
-   
+
    - Navigate to `http://localhost:3000` for the frontend.
    - Backend API will be running on `http://localhost:4000`.
 
@@ -107,6 +108,7 @@ We welcome contributions from the community. If you would like to contribute, pl
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more information.
 
 ## Contact
+
 - Alysson Ramos - ajsr@cin.ufpe.br
 - José Basilio - jbsn3@cin.ufpe.br
 - Shellyda Barbosa - sfsb2@cin.ufpe.br
