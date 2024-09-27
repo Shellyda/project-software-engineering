@@ -1,14 +1,13 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
-import { LinkButton } from './LinkButton';
+import LinkButton from './LinkButton';
 
 const meta: Meta<typeof LinkButton> = {
   title: 'Atoms/LinkButton',
   component: LinkButton,
   tags: ['autodocs'],
   args: {
-    children: 'Example',
-    variant: 'default'
+    children: 'Example'
   }
 };
 
