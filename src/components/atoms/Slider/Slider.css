@@ -1,0 +1,14 @@
+/* styles/Slider.css */
+.scrollbar-hidden::-webkit-scrollbar {
+  display: none; /* Hides the scrollbar in WebKit browsers (Chrome, Safari) */
+}
+
+.scrollbar-hidden {
+  -ms-overflow-style: none; /* Internet Explorer and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+/* Optional: For better visual experience, hide the scrollbar even when scrolling */
+.scrollbar-hidden {
+  overflow: -moz-hidden-unscrollable; /* Firefox */
+}

@@ -23,11 +23,13 @@ const ReceipeCard: React.FC<ReceipeCardProps> = ({
   image,
   initialRating,
   className,
+  receipeId,
   ...rest
 }) => {
   return (
     <div
-      className={`bg-secondary-base py-2 px-4 rounded-lg w-[235px] h-[235px] ${className}`}
+      id={receipeId}
+      className={`bg-secondary-base py-2 px-4 rounded-lg w-[235px] h-[235px] min-w-[235px] min-h-[235px] ${className}`}
       {...rest}
     >
       <div>
