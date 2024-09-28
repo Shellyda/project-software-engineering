@@ -2,6 +2,11 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import React from 'react';
 
+// Mock the useRouter hook
+jest.mock('next/navigation', () => ({
+  useRouter: jest.fn()
+}));
+
 import SignUpPage from './page';
 
 describe('SignUpPage Component', () => {
