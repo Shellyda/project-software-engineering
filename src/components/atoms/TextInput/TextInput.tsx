@@ -18,7 +18,12 @@ const InputWithIcon: React.FC<InputWithIconProps> = ({ label, icon, type = 'text
 
   return (
     <div className="flex flex-col space-y-2">
-      <label className="text-black-primary text-purple-600 text-sm font-bold">{label}</label>
+      <label
+        style={{ color: '#2E2C25' }}
+        className="text-black-primary text-purple-600 text-sm font-bold"
+      >
+        {label}
+      </label>
       <div className="relative">
         <input
           type={inputType}
