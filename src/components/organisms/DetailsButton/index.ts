@@ -1,1 +1,3 @@
-export * from './DetailsButton';
+import DetailsButton from './DetailsButton';
+
+export default DetailsButton;

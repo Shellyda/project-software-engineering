@@ -10,5 +10,9 @@ interface MainLayoutProps {
 export const MainLayout = ({ children }: MainLayoutProps) => {
   // const wrapperStyles = cn('flex flex-col min-h-screen', className);
 
-  return <main className="px-4 bg-primary flex-1 min-h-screen w-full">{children}</main>;
+  return (
+    <main className="px-4 bg-primary flex-1 min-h-screen w-full max-w-full overflow-x-hidden">
+      {children}
+    </main>
+  );
 };

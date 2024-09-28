@@ -6,7 +6,7 @@ type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
 
 const DetailsButton: React.FC<ButtonProps> = ({ children, className, ...rest }) => {
   const baseClasses =
-    'bg-base px-6 py-2 text-black font-bold text-xs rounded-full focus:outline-none focus:ring-2 focus:ring-purple-500';
+    'bg-base text-black font-bold text-xs rounded-full focus:outline-none focus:ring-2 focus:ring-purple-500';
 
   return (
     <button className={`${baseClasses} ${className || ''}`} {...rest}>
