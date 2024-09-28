@@ -6,9 +6,7 @@ const meta: Meta<typeof TextInput> = {
   title: 'Atoms/TextInput',
   component: TextInput,
   tags: ['autodocs'],
-  args: {
-    children: 'Example'
-  }
+  args: {}
 };
 
 export default meta;

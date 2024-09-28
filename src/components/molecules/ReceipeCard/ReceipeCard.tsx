@@ -52,7 +52,7 @@ const ReceipeCard: React.FC<ReceipeCardProps> = ({
           style={{ maxWidth: '40%', width: '40%', height: '20px' }}
           className="text-sm font-bold text-[#4F8056] bg-[#F5F3EC] hover:bg-[#D6D0C7]"
         >
-          Ver mais
+          ver mais
         </DetailsButton>
       </div>
     </div>
