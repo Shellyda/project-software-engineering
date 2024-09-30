@@ -15,9 +15,9 @@ const youngSerif = Young_Serif({
 });
 
 export const metadata: Metadata = {
-  title: 'Receita aí!',
+  title: 'Me Passa a Receita aí!',
   description:
-    '🚀 Boilerplate and Starter for Next.js, Tailwind CSS and TypeScript ⚡️ Made with developer experience first: Next.js, TypeScript, ESLint, Prettier, Husky, Lint-Staged, Jest, React Testing Library, PostCSS, Tailwind CSS, Storybook, Plop, GH actions.'
+    'Me passa a receita aí? é uma plataforma que permite aos usuários explorar uma ampla variedade de receitas compartilhadas por uma comunidade de amantes da culinária. Os usuários podem contribuir compartilhando suas próprias receitas, fornecendo feedback através de comentários e avaliando as receitas que experimentam.'
 };
 
 interface RootLayoutProps {
