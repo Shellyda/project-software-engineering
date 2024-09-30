@@ -16,7 +16,8 @@ module.exports = {
         'base-beige': '#CBB9A7',
         'light-secondary-base': '#7B4D1F',
         'brown-ds': '#906D49',
-        'gray-ds': '#868686'
+        'gray-ds': '#868686',
+        'beige-ds': '#D8D2B9'
       }
     }
   },

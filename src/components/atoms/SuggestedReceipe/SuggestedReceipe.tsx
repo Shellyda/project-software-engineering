@@ -8,6 +8,9 @@ interface SuggedtedRecipeProps extends React.HTMLAttributes<HTMLDivElement> {
   subtitle: string;
   time: number;
   initialRating: number;
+  isReview?: boolean; // New prop to determine if it's a review
+  name?: string; // Optional prop for the reviewer's name
+  date?: string; // Optional prop for the review date
 }
 
 const pacifico = Pacifico({
@@ -20,8 +23,14 @@ const SuggedtedRecipe: React.FC<SuggedtedRecipeProps> = ({
   subtitle,
   time,
   initialRating,
+  isReview = false,
+  name,
+  date,
   ...divProps
 }) => {
+  // Determine the subtitle based on the isReview prop
+  const displaySubtitle = isReview && name && date ? `@${name} - Avaliado em ${date}` : subtitle;
+
   return (
     <div
       {...divProps}
@@ -36,9 +45,10 @@ const SuggedtedRecipe: React.FC<SuggedtedRecipeProps> = ({
             style={{ width: '30%', marginLeft: '1rem' }}
           />
         </div>
-        <p className="text-light-secondary-base">
-          {subtitle} - {time} min
-        </p>
+        <div className="flex">
+          <p className="text-light-secondary-base text-xs">{displaySubtitle}</p>
+          {!isReview && <p className="text-light-secondary-base text-xs">&nbsp;- {time} min</p>}
+        </div>
       </div>
     </div>
   );

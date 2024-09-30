@@ -29,7 +29,7 @@ const RecipeInformation: React.FC<RecipeInformationProps> = ({
       alt="image"
       width={136}
       height={120}
-      className="rounded-md mx-1 object-cover min-w-[130px] mx-2 min-h-[110px] max-h-[120px]"
+      className="rounded-md mr-2 object-cover min-w-[130px] min-h-[110px] max-h-[120px]"
     />
     <div className="flex flex-col flex-1 justify-between">
       <div>

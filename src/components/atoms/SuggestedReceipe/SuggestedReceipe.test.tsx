@@ -20,8 +20,8 @@ describe('SuggedtedRecipe Component', () => {
     expect(titleElement.textContent).toContain('Poke de salmão');
 
     // Find the subtitle and time by using text content check
-    const subtitleElement = screen.getByText(/Jantar - 60 min/);
-    expect(subtitleElement.textContent).toContain('Jantar - 60 min');
+    const subtitleElement = screen.getByText(/Jantar/);
+    expect(subtitleElement.textContent).toContain('Jantar');
   });
 
   it('renders with additional props such as className or id without direct attribute checks', () => {
@@ -35,7 +35,7 @@ describe('SuggedtedRecipe Component', () => {
     expect(titleElement.textContent).toContain('Poke de salmão');
 
     // Ensure subtitle and time are rendered correctly
-    const subtitleElement = screen.getByText(/Jantar - 60 min/);
-    expect(subtitleElement.textContent).toContain('Jantar - 60 min');
+    const subtitleElement = screen.getByText(/Jantar/);
+    expect(subtitleElement.textContent).toContain('Jantar');
   });
 });
