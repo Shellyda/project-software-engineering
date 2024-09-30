@@ -29,21 +29,23 @@ const RecipeInformation: React.FC<RecipeInformationProps> = ({
       alt="image"
       width={136}
       height={120}
-      className="rounded-md mx-1 object-cover min-w-[130px] mx-2 min-h-[110px] max-h-[120px]"
+      className="rounded-md mr-2 object-cover min-w-[130px] min-h-[110px] max-h-[120px]"
     />
-    <div className="flex flex-col flex-1">
-      <h2 className="text-sm truncate max-w-[200px] overflow-hidden text-ellipsis whitespace-nowrap">
-        {name}
-      </h2>
-      <div className="flex flex-row text-sm mb-1">
-        <p className="text-xs">{type}</p>
-        <p className="text-xs mx-1">- {time}min</p>
+    <div className="flex flex-col flex-1 justify-between">
+      <div>
+        <h2 className="text-sm truncate max-w-[200px] overflow-hidden text-ellipsis whitespace-nowrap">
+          {name}
+        </h2>
+        <div className="flex flex-row text-sm mb-1">
+          <p className="text-xs text-secondary-base">{type} - </p>
+          <p className="text-xs text-brown-ds mx-1">{time}min</p>
+        </div>
+        <div className="flex flex-row justify-between items-center">
+          <StarRating initialRating={initialRating} disabled style={{ width: '70px' }} />{' '}
+          <p className="text-xs">{date}</p>
+        </div>
       </div>
-      <div className="flex flex-row justify-between items-center">
-        <StarRating initialRating={initialRating} disabled style={{ width: '70px' }} />{' '}
-        <p className="text-xs">{date}</p>
-      </div>
-      <div className="mt-4 flex flex-wrap gap-0.5">
+      <div className="flex flex-wrap gap-0.5">
         {tags.map((tag) => (
           <Tag key={tag} id={tag} value={tag} style={{ height: '20px', width: 'fit-content' }} />
         ))}
