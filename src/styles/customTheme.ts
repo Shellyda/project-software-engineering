@@ -1,3 +1,7 @@
+const fontFamily = {
+  primary: ['var(--font-primary)']
+};
+
 const colors = {
   primary: '#FCD74F',
   secondary: '#136640',
@@ -8,4 +12,9 @@ const colors = {
   'light-secondary-base': '#7B4D1F'
 };
 
-export default colors;
+const customTheme = {
+  fontFamily,
+  colors
+};
+
+export default customTheme;
