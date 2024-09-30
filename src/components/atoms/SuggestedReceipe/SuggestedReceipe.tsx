@@ -28,7 +28,7 @@ const SuggedtedRecipe: React.FC<SuggedtedRecipeProps> = ({
       className={`flex items-center bg-base-beige rounded-md py-2 px-4 max-w-sm shadow-md`}
     >
       <div className="flex flex-col">
-        <div className="flex flex-row items-center">
+        <div className="flex flex-row items-center justify-between">
           <h2 className={`text-xl font-bold text-secondary-base ${pacifico.className}`}>{title}</h2>
           <StarRating
             initialRating={initialRating}

@@ -10,6 +10,7 @@ interface ReceipeCardProps extends React.HTMLAttributes<HTMLDivElement> {
   title: string;
   image: string;
   initialRating: number;
+  onClickDetails?: (event: React.MouseEvent<HTMLButtonElement>, receipeId: string) => void;
 }
 
 // Import Pacifico font
@@ -24,6 +25,7 @@ const ReceipeCard: React.FC<ReceipeCardProps> = ({
   initialRating,
   className,
   receipeId,
+  onClickDetails,
   ...rest
 }) => {
   return (
@@ -33,7 +35,11 @@ const ReceipeCard: React.FC<ReceipeCardProps> = ({
       {...rest}
     >
       <div>
-        <h2 className={`text-2xl font-bold mb-2 text-[#FFFFFF] ${pacifico.className}`}>{title}</h2>
+        <h2
+          className={`text-xl h-[35px] font-bold mb-2 text-[#FFFFFF] ${pacifico.className} overflow-hidden text-ellipsis whitespace-nowrap`}
+        >
+          {title}
+        </h2>
       </div>
 
       <div className="flex justify-center w-full h-[130px] mb-4">
@@ -53,6 +59,7 @@ const ReceipeCard: React.FC<ReceipeCardProps> = ({
         <DetailsButton
           style={{ maxWidth: '40%', width: '40%', height: '20px' }}
           className="text-sm font-bold text-[#4F8056] bg-[#F5F3EC] hover:bg-[#D6D0C7]"
+          onClick={(event) => onClickDetails && onClickDetails(event, receipeId)}
         >
           ver mais
         </DetailsButton>

@@ -4,7 +4,7 @@ import './src/lib/env/env.mjs';
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: ['localhost', 'plus.unsplash.com']
+    domains: ['localhost', 'plus.unsplash.com', 'images.unsplash.com']
   }
 };
 
