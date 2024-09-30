@@ -11,7 +11,9 @@ jest.mock('next/font/google', () => ({
 
 describe('SuggedtedRecipe Component', () => {
   it('renders the title, subtitle, and time correctly', () => {
-    render(<SuggedtedRecipe title="Poke de salmão" subtitle="Jantar" time={60} />);
+    render(
+      <SuggedtedRecipe title="Poke de salmão" subtitle="Jantar" time={60} initialRating={3} />
+    );
 
     // Find the title by role (heading role) and check text content
     const titleElement = screen.getByRole('heading', { level: 2 });
@@ -24,7 +26,9 @@ describe('SuggedtedRecipe Component', () => {
 
   it('renders with additional props such as className or id without direct attribute checks', () => {
     // We test with id or class indirectly by focusing on render behavior, not attributes
-    render(<SuggedtedRecipe title="Poke de salmão" subtitle="Jantar" time={60} />);
+    render(
+      <SuggedtedRecipe title="Poke de salmão" subtitle="Jantar" time={60} initialRating={3} />
+    );
 
     // Ensure the title is still correctly rendered
     const titleElement = screen.getByRole('heading', { level: 2 });

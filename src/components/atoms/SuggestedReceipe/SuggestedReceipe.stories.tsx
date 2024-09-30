@@ -16,3 +16,9 @@ export default meta;
 type Story = StoryObj<typeof SuggestedReceipe>;
 
 export const Default: Story = {};
+Default.args = {
+  initialRating: 3,
+  title: 'Poke de salmão',
+  subtitle: 'Jantar',
+  time: 60
+};
