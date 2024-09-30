@@ -14,7 +14,9 @@ module.exports = {
         'secondary-base': '#3D2D1D',
         'black-primary': '#2E2C25',
         'base-beige': '#CBB9A7',
-        'light-secondary-base': '#7B4D1F'
+        'light-secondary-base': '#7B4D1F',
+        'brown-ds': '#906D49',
+        'gray-ds': '#868686'
       }
     }
   },

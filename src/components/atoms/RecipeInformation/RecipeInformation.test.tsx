@@ -22,11 +22,11 @@ describe('RecipeInformation Component', () => {
     expect(nameElement).toBeTruthy();
 
     // Check that the type is rendered
-    const typeElement = screen.getByText(mockProps.type);
+    const typeElement = screen.getByText(`${mockProps.type} -`);
     expect(typeElement).toBeTruthy();
 
     // Check that the time is rendered with "min"
-    const timeElement = screen.getByText(`- ${mockProps.time}min`);
+    const timeElement = screen.getByText(`${mockProps.time}min`);
     expect(timeElement).toBeTruthy();
 
     // Check that the date is rendered
