@@ -1,7 +1,7 @@
 'use client';
 import { ShareIcon } from '@heroicons/react/24/outline';
 import Image from 'next/image';
-import { useSearchParams, useParams } from 'next/navigation';
+import { useParams, useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 
 import Button from '@/components/atoms/Button/Button';
@@ -9,18 +9,12 @@ import Greeting from '@/components/atoms/Greeting';
 import StarRating from '@/components/organisms/StarRating';
 import { BaseLayout } from '@/components/templates/BaseLayout';
 
-interface RecipePageProps {
-  params: {
-    id: string; // Dynamic parameter from the URL
-  };
-  userId: string; // Assuming userId is passed as a prop or fetched from context
-}
-
-const RecipePage = ({ userId }: RecipePageProps) => {
+const RecipePage = () => {
   const params = useParams();
   const { id } = params;
 
-  // Get the query parameters from the URL
+  const userId = 'exampleUserId';
+
   const searchParams = useSearchParams();
   const userName = searchParams.get('user_name');
   const recipeName = searchParams.get('recipe_name');
@@ -31,19 +25,18 @@ const RecipePage = ({ userId }: RecipePageProps) => {
 
   const isUserRecipe = id === userId;
 
-  // State to track the rating value and button enabled status
   const [ratingValue, setRatingValue] = useState<number | null>(null);
   const isButtonEnabled = ratingValue !== null;
 
   const handleVote = (rating: number) => {
-    setRatingValue(rating); // Update the rating value when voted
+    setRatingValue(rating);
   };
 
   const handleCopyLink = async () => {
-    const currentUrl = window.location.href; // Get the current URL
+    const currentUrl = window.location.href;
     try {
-      await navigator.clipboard.writeText(currentUrl); // Copy to clipboard
-      alert('Link copied to clipboard!'); // Optional: Show a confirmation message
+      await navigator.clipboard.writeText(currentUrl);
+      alert('Link copied to clipboard!');
     } catch (err) {
       console.error('Failed to copy: ', err);
     }
@@ -85,9 +78,9 @@ const RecipePage = ({ userId }: RecipePageProps) => {
             <p>{userName}</p>
             <StarRating
               style={{ width: '80px' }}
-              disabled={false} // Allow voting
+              disabled={false}
               initialRating={Number(recipeRating)}
-              onVote={handleVote} // Update the handleVote function
+              onVote={handleVote}
             />
           </div>
         </div>
