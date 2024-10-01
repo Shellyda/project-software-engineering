@@ -1,7 +1,7 @@
 'use client';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import React, { useState, ChangeEvent, FormEvent } from 'react';
+import React, { ChangeEvent, FormEvent, useState } from 'react';
 
 import Button from '@/components/atoms/Button/Button';
 import LinkButton from '@/components/atoms/LinkButton';
@@ -23,7 +23,7 @@ const LoginPage: React.FC = () => {
   };
 
   const handleRedirectToRegister = () => {
-    router.push('/cadastro'); // Redirect to /cadastro
+    router.push('/register'); // Redirect to /cadastro
   };
 
   // Handler for password change
