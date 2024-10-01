@@ -231,7 +231,7 @@ const CreateRecipe: React.FC = () => {
             <Button
               type="submit"
               variant="default"
-              className={`w-full mb-6 py-2 px-4 rounded-md transition-colors duration-300 ${
+              className={`w-full mb-20 py-2 px-4 rounded-md transition-colors duration-300 ${
                 isFormValid()
                   ? 'bg-black-primary text-white hover:bg-blue-600'
                   : 'bg-gray-300 text-gray-500 cursor-not-allowed'
