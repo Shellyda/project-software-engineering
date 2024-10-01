@@ -9,9 +9,15 @@ type GreetingProps = {
   isAuthenticated: boolean;
   title: string;
   userImage?: string;
+  disableSuffix?: boolean;
 };
 
-const Greeting: React.FC<GreetingProps> = ({ isAuthenticated, title, userImage }) => {
+const Greeting: React.FC<GreetingProps> = ({
+  isAuthenticated,
+  title,
+  userImage,
+  disableSuffix
+}) => {
   const router = useRouter();
 
   const handleLoginRedirect = () => {
@@ -28,20 +34,22 @@ const Greeting: React.FC<GreetingProps> = ({ isAuthenticated, title, userImage }
         <h1 className="text-4xl text-black-primary">{title}</h1>
       </div>
 
-      <div className="ml-4">
-        {isAuthenticated && userImage ? (
-          <Image
-            src={userImage}
-            alt="Profile Picture"
-            width={50}
-            height={50}
-            className="h-[50px] rounded-full object-cover border border-black-primary"
-            onClick={handleProfileRedirect}
-          />
-        ) : (
-          <LinkButton onClick={handleLoginRedirect}>Log In</LinkButton>
-        )}
-      </div>
+      {!disableSuffix && (
+        <div className="ml-4">
+          {isAuthenticated && userImage ? (
+            <Image
+              src={userImage}
+              alt="Profile Picture"
+              width={50}
+              height={50}
+              className="h-[50px] rounded-full object-cover border border-black-primary"
+              onClick={handleProfileRedirect}
+            />
+          ) : (
+            <LinkButton onClick={handleLoginRedirect}>Log In</LinkButton>
+          )}
+        </div>
+      )}
     </div>
   );
 };
