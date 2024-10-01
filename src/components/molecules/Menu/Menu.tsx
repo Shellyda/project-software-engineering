@@ -9,7 +9,7 @@ import {
   MagnifyingGlassIcon as SearchSolidIcon,
   StarIcon as StarSolidIcon
 } from '@heroicons/react/24/solid';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 import {
@@ -24,16 +24,22 @@ import IconButton from '@/components/atoms/IconButton/IconButton';
 export const Menu = () => {
   const router = useRouter();
   const pathname = usePathname();
-  const [activeIcon, setActiveIcon] = useState<string | null>(null);
+  const searchParams = useSearchParams();
+
+  const [activeRoute, setActiveRoute] = useState<string | null>(null);
 
   useEffect(() => {
+    const tab = searchParams.get('tab');
     const route = pathname.split('/')[1];
-    setActiveIcon(route || 'home');
-  }, [pathname]);
 
-  const HandleIconClick = (iconName: string) => {
-    setActiveIcon(iconName);
-    router.push(`/${iconName}`);
+    const currentRoute = tab === 'reviews' ? 'profile?tab=reviews' : route || 'home';
+
+    setActiveRoute(currentRoute);
+  }, [pathname, searchParams]);
+
+  const HandleIconClick = (routeName: string) => {
+    setActiveRoute(routeName);
+    router.push(routeName);
   };
 
   return (
@@ -48,34 +54,34 @@ export const Menu = () => {
       gap={25}
     >
       <IconButton
-        isActive={activeIcon === 'home'}
+        isActive={activeRoute === 'home'}
         outlineIcon={HomeOutlineIcon}
         solidIcon={HomeSolidIcon}
         onClick={() => HandleIconClick('home')}
       />
       <IconButton
-        isActive={activeIcon === 'search'}
+        isActive={activeRoute === 'search'}
         outlineIcon={SearchOutlineIcon}
         solidIcon={SearchSolidIcon}
         onClick={() => HandleIconClick('search')}
       />
       <IconButton
-        isActive={activeIcon === 'recipe-creation'}
+        isActive={activeRoute === 'recipe-creation'}
         outlineIcon={RecipeOutlineIcon}
         solidIcon={RecipeSolidIcon}
         onClick={() => HandleIconClick('recipe-creation')}
       />
       <IconButton
-        isActive={activeIcon === 'reviews'}
+        isActive={activeRoute === 'profile?tab=reviews'}
         outlineIcon={StarOutlineIcon}
         solidIcon={StarSolidIcon}
-        onClick={() => HandleIconClick('reviews')}
+        onClick={() => HandleIconClick('profile?tab=reviews')}
       />
       <IconButton
-        isActive={activeIcon === 'perfil'}
+        isActive={activeRoute === 'profile'}
         outlineIcon={ChefHatOutlineIcon}
         solidIcon={ChefHatSolidIcon}
-        onClick={() => HandleIconClick('perfil')}
+        onClick={() => HandleIconClick('profile')}
         width={33}
         height={33}
       />

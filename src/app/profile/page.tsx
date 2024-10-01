@@ -1,5 +1,7 @@
 'use client';
-import React from 'react';
+
+import { useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
 import SuggestedReceipe from '@/components/atoms/SuggestedReceipe';
 import ProfileHeader from '@/components/organisms/ProfileHeader';
@@ -9,9 +11,21 @@ import { BaseLayout } from '@/components/templates/BaseLayout';
 import RecipeInformation from '../../components/atoms/RecipeInformation';
 
 const Profile = () => {
-  const isMyProfile = true; // Replace with your actual logic
+  const searchParams = useSearchParams();
 
-  // Array of recipe data for the Feed tab
+  const [activeTab, setActiveTab] = useState('Seu feed');
+
+  useEffect(() => {
+    const tab = searchParams.get('tab');
+    if (tab === 'reviews') {
+      setActiveTab('Reviews');
+    } else {
+      setActiveTab('Seu feed');
+    }
+  }, [searchParams]);
+
+  const isMyProfile = true;
+
   const feedRecipes = [
     {
       initialRating: 3,
@@ -158,7 +172,7 @@ const Profile = () => {
 
   const tabs = [
     {
-      title: 'Feed',
+      title: 'Seu feed',
       content: (
         <div className="flex flex-col gap-4">
           {feedRecipes.map((recipe, index) => (
@@ -173,12 +187,13 @@ const Profile = () => {
             />
           ))}
         </div>
-      )
+      ),
+      path: 'feed'
     },
     ...(isMyProfile
       ? [
           {
-            title: 'Review',
+            title: 'Reviews',
             content: (
               <div>
                 {suggestedRecipes.map((receipe) => (
@@ -192,12 +207,12 @@ const Profile = () => {
                       isReview
                       name="Jorge"
                       date="22/07/2024"
-                      // ADD Onclick
                     />
                   </div>
                 ))}
               </div>
-            )
+            ),
+            path: 'reviews'
           }
         ]
       : [])
@@ -213,7 +228,7 @@ const Profile = () => {
           username="lorojose"
           profileImage="https://plus.unsplash.com/premium_photo-1673792686302-7555a74de717?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OXx8Z2lybHxlbnwwfHwwfHx8MA%3D%3D"
         />
-        <SwitchTabs tabs={tabs} />
+        <SwitchTabs tabs={tabs} activeTab={activeTab} />
       </BaseLayout>
     </div>
   );

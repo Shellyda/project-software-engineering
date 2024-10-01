@@ -1,19 +1,43 @@
-import type { Meta, StoryObj } from '@storybook/react';
+// IconButton.stories.tsx
 
-import { IconButton } from './IconButton';
+import { Meta, StoryFn } from '@storybook/react';
 
-const meta: Meta<typeof IconButton> = {
-  title: 'Atoms/IconButton',
+import IconButton from './IconButton';
+import HomeOutlineIcon from './icons/HomeOutlineIcon.svg';
+import HomeSolidIcon from './icons/HomeSolidIcon.svg';
+import { IconButtonProps } from './interfaces';
+
+const meta: Meta<IconButtonProps> = {
+  title: 'Components/IconButton',
   component: IconButton,
-  tags: ['autodocs'],
-  args: {
-    children: 'Example',
-    variant: 'default'
+  argTypes: {
+    isActive: {
+      control: { type: 'boolean' }
+    },
+    onClick: { action: 'clicked' }
   }
 };
 
 export default meta;
 
-type Story = StoryObj<typeof IconButton>;
+const Template: StoryFn<IconButtonProps> = (args: IconButtonProps) => <IconButton {...args} />;
 
-export const Default: Story = {};
+export const Outline = Template.bind({});
+Outline.args = {
+  isActive: false,
+  outlineIcon: HomeOutlineIcon,
+  solidIcon: HomeSolidIcon,
+  onClick: () => {},
+  width: 32,
+  height: 32
+};
+
+export const Solid = Template.bind({});
+Solid.args = {
+  isActive: true,
+  outlineIcon: HomeOutlineIcon,
+  solidIcon: HomeSolidIcon,
+  onClick: () => {},
+  width: 32,
+  height: 32
+};
