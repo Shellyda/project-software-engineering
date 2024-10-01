@@ -89,5 +89,8 @@
       "pnpm prettier:format",
       "pnpm eslint:format"
     ]
-  }
+  },
+  "resolutions": {
+    "babel-preset-current-node-syntax": "1.0.0"
+}
 }
