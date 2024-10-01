@@ -25,7 +25,7 @@ const Greeting: React.FC<GreetingProps> = ({
   };
 
   const handleProfileRedirect = () => {
-    router.push('/perfil');
+    router.push('/profile');
   };
 
   return (
