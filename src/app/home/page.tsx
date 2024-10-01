@@ -1,5 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 
 import Greeting from '@/components/atoms/Greeting';
 import LinkButton from '@/components/atoms/LinkButton';
@@ -7,6 +9,13 @@ import Slider from '@/components/atoms/Slider';
 import SuggestedReceipe from '@/components/atoms/SuggestedReceipe';
 import ReceipeCard from '@/components/molecules/ReceipeCard';
 import { BaseLayout } from '@/components/templates/BaseLayout';
+
+type Recipe = {
+  recipeId: string;
+  title: string;
+  image: string;
+  initialRating: number;
+};
 
 const recipes = [
   {
@@ -227,66 +236,86 @@ const suggestedRecipes = [
   }
 ];
 
-const HomePage = () => (
-  <div>
-    <BaseLayout>
-      <Greeting
-        title="Olá, Chef"
-        isAuthenticated={true}
-        userImage="https://plus.unsplash.com/premium_photo-1673792686302-7555a74de717?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OXx8Z2lybHxlbnwwfHwwfHx8MA%3D%3D"
-      />
-      <div className="my-4">
-        <Slider>
-          {recipes.map((recipe) => (
-            <ReceipeCard
-              key={recipe.recipeId}
-              receipeId={recipe.recipeId}
-              title={recipe.title}
-              image={recipe.image}
-              initialRating={recipe.initialRating}
-              //ADD onClickDetails={(id: string) => null}
-            />
-          ))}
-        </Slider>
-      </div>
-      <div className="mt-8">
-        <p className="font-light font-thin">Chefs pra você conhecer</p>
+const HomePage = () => {
+  const router = useRouter();
+
+  const handleClickRecipe = (event: any, recipe: Recipe) => {
+    event.preventDefault(); // Evitar o comportamento padrão do botão, se necessário
+
+    const query = new URLSearchParams({
+      recipe_name: recipe.title,
+      recipe_image: recipe.image,
+      recipe_rating: recipe.initialRating.toString(),
+      user_name: 'Amanda Nunes',
+      ingredients:
+        'Prepare o arroz, o feijão e o macarrão alem de de tudo e muito mais que isso testando palavras aleatorias pois me prometeram um autoresize então se promoteram ainda terá Prepare o arroz, o feijão e o macarrão alem de de tudo e muito mais que isso testando palavras aleatorias pois me prometeram um autoresize então se promoteram ainda terá',
+      instructions: 'Cozinhe tudo por 80 minutos e vai ser isso mesmo.'
+    }).toString();
+
+    router.push(`/receita/${recipe.recipeId}?${query}`); // Redireciona para a página de detalhes
+  };
+
+  return (
+    <div>
+      <BaseLayout>
+        <Greeting
+          title="Olá, Chef"
+          isAuthenticated={true}
+          userImage="https://plus.unsplash.com/premium_photo-1673792686302-7555a74de717?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OXx8Z2lybHxlbnwwfHwwfHx8MA%3D%3D"
+        />
         <div className="my-4">
           <Slider>
-            {chefs.map((chef) => (
-              <Image
-                key={chef.name}
-                src={chef.photo}
-                alt={chef.name}
-                width={80}
-                height={70}
-                className="rounded-md mx-1 object-cover min-w-[80px] max-h-[80px]"
-                // ADD OnClick
+            {recipes.map((recipe) => (
+              <ReceipeCard
+                key={recipe.recipeId}
+                receipeId={recipe.recipeId}
+                title={recipe.title}
+                image={recipe.image}
+                initialRating={recipe.initialRating}
+                onClick={(event) => handleClickRecipe(event, recipe)}
               />
             ))}
           </Slider>
         </div>
-      </div>
-      <div className="my-4 mt-8">
-        <div className="flex flex-row justify-between">
-          <p>Receitas feitas pra você</p>
-          <LinkButton onClick={() => null}>ver mais</LinkButton>
-        </div>
-        {suggestedRecipes.map((receipe) => (
-          <div key={receipe.title} className="my-4">
-            <SuggestedReceipe
-              key={receipe.title}
-              title={receipe.title}
-              initialRating={receipe.initialRating}
-              time={receipe.time}
-              subtitle={receipe.subtitle}
-              // ADD Onclick
-            />
+        <div className="mt-8">
+          <p className="font-light font-thin">Chefs pra você conhecer</p>
+          <div className="my-4">
+            <Slider>
+              {chefs.map((chef) => (
+                <Image
+                  key={chef.name}
+                  src={chef.photo}
+                  alt={chef.name}
+                  width={80}
+                  height={70}
+                  className="rounded-md mx-1 object-cover min-w-[80px] max-h-[80px]"
+                  // ADD OnClick
+                />
+              ))}
+            </Slider>
           </div>
-        ))}
-      </div>
-    </BaseLayout>
-  </div>
-);
+        </div>
+        <div className="my-4 mt-8">
+          <div className="flex flex-row justify-between">
+            <p>Receitas feitas pra você</p>
+            <LinkButton onClick={() => null}>ver mais</LinkButton>
+          </div>
+          {suggestedRecipes.map((receipe) => (
+            <div key={receipe.title} className="my-4">
+              <SuggestedReceipe
+                key={receipe.title}
+                title={receipe.title}
+                initialRating={receipe.initialRating}
+                time={receipe.time}
+                subtitle={receipe.subtitle}
+                // ADD Onclick
+              />
+            </div>
+          ))}
+        </div>
+      </BaseLayout>
+    </div>
+  );
+};
 
 export default HomePage;
