@@ -3,7 +3,7 @@ import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
 import React, { useState } from 'react';
 
 interface InputWithIconProps extends React.InputHTMLAttributes<HTMLInputElement> {
-  label: string;
+  label?: string;
   icon?: React.ReactNode;
 }
 
@@ -18,12 +18,14 @@ const InputWithIcon: React.FC<InputWithIconProps> = ({ label, icon, type = 'text
 
   return (
     <div className="flex flex-col space-y-2">
-      <label
-        style={{ color: '#2E2C25' }}
-        className="text-black-primary text-purple-600 text-sm font-bold"
-      >
-        {label}
-      </label>
+      {label && (
+        <label
+          style={{ color: '#2E2C25' }}
+          className="text-black-primary text-purple-600 text-sm font-bold"
+        >
+          {label}
+        </label>
+      )}
       <div className="relative">
         <input
           type={inputType}
