@@ -37,9 +37,9 @@ const InputWithIcon: React.FC<InputWithIconProps> = ({ label, icon, type = 'text
           {type === 'password' ? (
             <span onClick={togglePasswordVisibility}>
               {inputType === 'password' ? (
-                <EyeIcon data-testid="icon" className="h-6 w-6" />
-              ) : (
                 <EyeSlashIcon data-testid="icon" className="h-6 w-6" />
+              ) : (
+                <EyeIcon data-testid="icon" className="h-6 w-6" />
               )}{' '}
             </span>
           ) : (

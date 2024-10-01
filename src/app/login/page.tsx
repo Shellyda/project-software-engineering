@@ -23,7 +23,7 @@ const LoginPage: React.FC = () => {
   };
 
   const handleRedirectToRegister = () => {
-    router.push('/register'); // Redirect to /cadastro
+    router.push('/sign-up'); // Redirect to /cadastro
   };
 
   // Handler for password change
