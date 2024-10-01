@@ -25,9 +25,9 @@ const IconButton = ({
       onClick={onClick}
     >
       {isActive ? (
-        <SolidIcon id="solid-icon" width={width} height={height} cursor="pointer" />
+        <SolidIcon data-testid="solid-icon" width={width} height={height} cursor="pointer" />
       ) : (
-        <OutlineIcon id="outline-icon" width={width} height={height} cursor="pointer" />
+        <OutlineIcon data-testid="outline-icon" width={width} height={height} cursor="pointer" />
       )}
     </MotionIcon>
   );
