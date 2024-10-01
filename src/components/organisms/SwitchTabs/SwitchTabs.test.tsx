@@ -1,47 +1,59 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
+import { useRouter } from 'next/navigation';
 
 import SwitchTabs from './SwitchTabs';
 
+jest.mock('next/navigation', () => ({
+  useRouter: jest.fn()
+}));
+
 describe('SwitchTabs Component', () => {
+  const mockRouterPush = jest.fn();
   const tabsData = [
-    { title: 'Tab 1', content: <p>Content for Tab 1</p> },
-    { title: 'Tab 2', content: <p>Content for Tab 2</p> },
-    { title: 'Tab 3', content: <p>Content for Tab 3</p> }
+    { title: 'Tab 1', content: <p>Content for Tab 1</p>, path: 'tab1' },
+    { title: 'Tab 2', content: <p>Content for Tab 2</p>, path: 'tab2' },
+    { title: 'Tab 3', content: <p>Content for Tab 3</p>, path: 'tab3' }
   ];
 
+  beforeEach(() => {
+    jest.clearAllMocks();
+    (useRouter as jest.Mock).mockReturnValue({ push: mockRouterPush });
+  });
+
   it('renders the correct number of tabs', () => {
-    render(<SwitchTabs tabs={tabsData} />);
+    render(<SwitchTabs tabs={tabsData} activeTab="Tab 1" />);
     const tabButtons = screen.getAllByRole('tab');
-    expect(tabButtons.length).toBe(3); // Verifying the number of tabs
+    expect(tabButtons.length).toBe(3);
   });
 
   it('displays the correct content for each tab when clicked', () => {
-    render(<SwitchTabs tabs={tabsData} />);
+    render(<SwitchTabs tabs={tabsData} activeTab="Tab 1" />);
 
-    // Initially, the first tab's content should be displayed
     expect(screen.getByText('Content for Tab 1')).toBeTruthy();
 
-    // Click on Tab 2 and check if its content is displayed
     fireEvent.click(screen.getByRole('tab', { name: 'Tab 2' }));
     expect(screen.getByText('Content for Tab 2')).toBeTruthy();
 
-    // Click on Tab 3 and check if its content is displayed
     fireEvent.click(screen.getByRole('tab', { name: 'Tab 3' }));
     expect(screen.getByText('Content for Tab 3')).toBeTruthy();
   });
 
-  it('ensures only the active tab content is displayed', () => {
-    render(<SwitchTabs tabs={tabsData} />);
+  it('changes the tab index when the activeTab prop changes', () => {
+    const { rerender } = render(<SwitchTabs tabs={tabsData} activeTab="Tab 1" />);
 
-    // Initially, only Tab 1's content should be visible
     expect(screen.getByText('Content for Tab 1')).toBeTruthy();
 
-    // Click on Tab 2 and check that Tab 1's content is no longer visible
-    fireEvent.click(screen.getByRole('tab', { name: 'Tab 2' }));
+    rerender(<SwitchTabs tabs={tabsData} activeTab="Tab 2" />);
     expect(screen.getByText('Content for Tab 2')).toBeTruthy();
+  });
 
-    // Click on Tab 3 and check that Tab 2's content is no longer visible
+  it('navigates to the correct path when a tab is clicked', () => {
+    render(<SwitchTabs tabs={tabsData} activeTab="Tab 1" />);
+
+    fireEvent.click(screen.getByRole('tab', { name: 'Tab 2' }));
+    expect(mockRouterPush).toHaveBeenCalledWith('profile/?tab=tab2');
+
     fireEvent.click(screen.getByRole('tab', { name: 'Tab 3' }));
-    expect(screen.getByText('Content for Tab 3')).toBeTruthy();
+    expect(mockRouterPush).toHaveBeenCalledWith('profile/?tab=tab3');
   });
 });
