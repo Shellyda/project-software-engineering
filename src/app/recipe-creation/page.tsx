@@ -14,13 +14,20 @@ const CreateRecipe: React.FC = () => {
   const [instructions, setInstructions] = useState<string>(''); // Variable for the second textarea
   const [imagePreview, setImagePreview] = useState<string | null>(null);
 
+  const [category, setCategory] = useState<string>(''); // Dropdown for category
+  const [difficulty, setDifficulty] = useState<string>(''); // Dropdown for difficulty
+  const [prepTime, setPrepTime] = useState<number>(0); // Input for preparation time
+
   // Function to check if all form fields are filled
   const isFormValid = (): boolean => {
     return (
       recipeName.trim() !== '' &&
       description.trim() !== '' &&
       instructions.trim() !== '' &&
-      imagePreview !== null
+      imagePreview !== null &&
+      category !== '' &&
+      difficulty !== '' &&
+      prepTime > 0
     );
   };
 
@@ -49,6 +56,21 @@ const CreateRecipe: React.FC = () => {
   // Handler for instructions change
   const handleInstructionsChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
     setInstructions(event.target.value);
+  };
+
+  // Handler for category dropdown change
+  const handleCategoryChange = (event: ChangeEvent<HTMLSelectElement>) => {
+    setCategory(event.target.value);
+  };
+
+  // Handler for difficulty dropdown change
+  const handleDifficultyChange = (event: ChangeEvent<HTMLSelectElement>) => {
+    setDifficulty(event.target.value);
+  };
+
+  // Handler for preparation time change
+  const handlePrepTimeChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setPrepTime(parseInt(event.target.value, 10));
   };
 
   // Handler for form submission
@@ -105,6 +127,74 @@ const CreateRecipe: React.FC = () => {
                 placeholder="Instruções da receita"
                 required
                 className="w-full border border-gray-300 rounded-md p-2 h-32 bg-[#D9D9D9]"
+              />
+            </div>
+
+            {/* Category dropdown */}
+            <label
+              style={{ color: '#2E2C25' }}
+              className="text-black-primary text-purple-600 text-sm font-bold"
+            >
+              Categoria
+            </label>
+            <div className="mb-4">
+              <select
+                value={category}
+                onChange={handleCategoryChange}
+                required
+                className="w-full border border-gray-300 rounded-md p-2 bg-[#D9D9D9]"
+              >
+                <option value="">Selecione uma categoria</option>
+                <option value="Vegano">Vegano</option>
+                <option value="Almoço">Almoço</option>
+                <option value="Doces">Doces</option>
+                <option value="Salgados">Salgados</option>
+                <option value="Lanche da Tarde">Lanche da Tarde</option>
+                <option value="Low carb">Low carb</option>
+                <option value="Mexicana">Mexicana</option>
+                <option value="Sem glúten">Sem glúten</option>
+                <option value="Fitness">Fitness</option>
+                <option value="Jantar">Jantar</option>
+              </select>
+            </div>
+
+            {/* Difficulty dropdown */}
+            <label
+              style={{ color: '#2E2C25' }}
+              className="text-black-primary text-purple-600 text-sm font-bold"
+            >
+              Dificuldade
+            </label>
+            <div className="mb-4">
+              <select
+                value={difficulty}
+                onChange={handleDifficultyChange}
+                required
+                className="w-full border border-gray-300 rounded-md p-2 bg-[#D9D9D9]"
+              >
+                <option value="">Selecione a dificuldade</option>
+                <option value="Fácil">Fácil</option>
+                <option value="Médio">Médio</option>
+                <option value="Difícil">Difícil</option>
+              </select>
+            </div>
+
+            {/* Preparation time input */}
+            <label
+              style={{ color: '#2E2C25' }}
+              className="text-black-primary text-purple-600 text-sm font-bold"
+            >
+              Tempo de preparo (minutos)
+            </label>
+            <div className="mb-6">
+              <input
+                type="number"
+                value={prepTime}
+                onChange={handlePrepTimeChange}
+                required
+                className="w-full border border-gray-300 rounded-md p-2 bg-[#D9D9D9]"
+                min={1}
+                placeholder="Tempo de preparo (minutos)"
               />
             </div>
 
