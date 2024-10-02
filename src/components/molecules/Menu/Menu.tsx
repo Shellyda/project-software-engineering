@@ -39,7 +39,7 @@ export const Menu = () => {
 
   const HandleIconClick = (routeName: string) => {
     setActiveRoute(routeName);
-    router.push(routeName);
+    router.push(`/${routeName}`);
   };
 
   return (
