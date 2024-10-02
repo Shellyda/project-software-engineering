@@ -41,7 +41,8 @@ const SignUpPage: React.FC = () => {
     setFormData((prev) => ({
       ...prev,
       [name]: value,
-      isEmailValid: name === 'email' ? validateEmail(value) : prev.isEmailValid
+      isEmailValid: name === 'email' ? validateEmail(value) : prev.isEmailValid,
+      error: null
     }));
 
     if (name === 'password' || name === 'confirmPassword') {
@@ -79,9 +80,23 @@ const SignUpPage: React.FC = () => {
     try {
       const { error } = await signUp(formData.email, formData.password);
       if (error) {
+        let errorMessage;
+
+        switch (error.code) {
+          case 'email_address_not_authorized':
+            errorMessage = 'Forneça um e-mail real.';
+            break;
+          case 'user_already_exists':
+            errorMessage = 'Usuário já cadastrado!';
+            break;
+          default:
+            errorMessage = 'Algo deu errado... Por favor, tente novamente em alguns minutos.';
+            break;
+        }
+
         setFormData((prev) => ({
           ...prev,
-          error: 'Algo deu errado... Por favor, tente novamente em alguns minutos.'
+          error: errorMessage
         }));
       } else {
         setShowWarningTemplates((prev) => ({
@@ -196,7 +211,7 @@ const SignUpPage: React.FC = () => {
                 type="submit"
                 variant="default"
                 isLoading={loading}
-                isDisabled={!allRequirementsMet}
+                isDisabled={!(allRequirementsMet && !error)}
                 style={{
                   width: '100%',
                   color: 'white',

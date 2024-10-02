@@ -32,7 +32,8 @@ const LoginPage: React.FC = () => {
     setFormData((prev) => ({
       ...prev,
       [name]: value,
-      isEmailValid: name === 'email' ? validateEmail(value) : prev.isEmailValid
+      isEmailValid: name === 'email' ? validateEmail(value) : prev.isEmailValid,
+      error: null
     }));
   };
 
@@ -43,17 +44,6 @@ const LoginPage: React.FC = () => {
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setFormData((prev) => ({ ...prev, loading: true, error: null }));
-
-    const { email, password } = formData;
-    if (!email || !password) {
-      setFormData((prev) => ({
-        ...prev,
-        error: 'Por favor, preencha todos os campos.',
-        loading: false
-      }));
-
-      return;
-    }
 
     try {
       const { error } = await login(email, password);
