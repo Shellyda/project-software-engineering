@@ -1,16 +1,17 @@
 'use client';
 
 import { useAuth } from '@/hooks/useAuth';
-import { Box, Button, Text, useToast } from '@chakra-ui/react';
-import Image from 'next/image';
+import { Box, Button, Text } from '@chakra-ui/react';
 import { useRouter } from 'next/navigation';
 import React, { ChangeEvent, FormEvent, useState } from 'react';
 
+import { LogoIcon } from '@/styles/customIcons';
+
 import LinkButton from '@/components/atoms/LinkButton';
 import TextInput from '@/components/atoms/TextInput';
+import ErrorScreen from '@/components/templates/ErrorScreen/ErrorScreen';
+import { LoadingScreen } from '@/components/templates/LoadingScreen';
 import { MainLayout } from '@/components/templates/MainLayout';
-
-import Logo from '../../../public/Logo.svg';
 
 const LoginPage: React.FC = () => {
   const { login } = useAuth();
@@ -20,8 +21,8 @@ const LoginPage: React.FC = () => {
     loading: false,
     error: null as string | null
   });
+  const [showWarningTemplates, setShowWarningTemplates] = useState({ success: false, fail: false });
   const router = useRouter();
-  const toast = useToast();
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -58,19 +59,19 @@ const LoginPage: React.FC = () => {
           error: 'Credenciais inválidas. Por favor, tente novamente.'
         }));
       } else {
-        toast({
-          title: 'Login realizado com sucesso!',
-          description: 'Redirecionando...',
-          status: 'success',
-          duration: 3000,
-          isClosable: true
-        });
-        router.push('/home');
+        setShowWarningTemplates((prev) => ({
+          ...prev,
+          success: true
+        }));
+
+        setTimeout(() => {
+          router.push('/home');
+        }, 3000);
       }
     } catch (err) {
-      setFormData((prev) => ({
+      setShowWarningTemplates((prev) => ({
         ...prev,
-        error: 'Ocorreu um erro ao tentar fazer login. Tente novamente.'
+        success: true
       }));
     } finally {
       setFormData((prev) => ({
@@ -82,12 +83,18 @@ const LoginPage: React.FC = () => {
 
   const { email, password, loading, error } = formData;
 
+  if (showWarningTemplates.success) {
+    return <LoadingScreen />;
+  } else if (showWarningTemplates.fail) {
+    return <ErrorScreen />;
+  }
+
   return (
     <div>
       <MainLayout>
         <div className="flex flex-col justify-around h-screen">
           <div className="flex flex-col justify-center items-center py-4">
-            <Image alt="Logo" src={Logo} height={88} width={88} />
+            <LogoIcon height={88} width={88} />
             <Text style={{ fontSize: '35px', textAlign: 'center' }}>Me passa a</Text>
             <Text style={{ fontSize: '35px', textAlign: 'center' }}>Receita aí?</Text>
           </div>
