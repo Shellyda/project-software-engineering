@@ -264,7 +264,7 @@ const Profile = () => {
   return (
     <div>
       <BaseLayout>
-        {userData?.profile_picture && (
+        {userData?.display_name && (
           <ProfileHeader
             onEdit={() => null}
             logout={logout}
