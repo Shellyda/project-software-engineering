@@ -41,7 +41,7 @@ const SplashScreen = () => {
           <motion.img
             src="/Logo.svg"
             alt="Icon"
-            style={{ width: '100px', position: 'relative', top: '17px' }}
+            style={{ width: '88px', height: '88px', position: 'relative', top: '17px' }}
             initial={{ y: -20 }}
             animate={{ y: 0 }}
             transition={{ duration: 1.5, ease: 'easeInOut' }}
