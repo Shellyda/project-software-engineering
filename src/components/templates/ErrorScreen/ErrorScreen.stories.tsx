@@ -6,10 +6,7 @@ const meta: Meta<typeof ErrorScreen> = {
   title: 'Templates/ErrorScreen',
   component: ErrorScreen,
   tags: ['autodocs'],
-  args: {
-    children: 'Example',
-    variant: 'default'
-  }
+  args: {}
 };
 
 export default meta;

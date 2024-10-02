@@ -3,7 +3,11 @@ import { ArrowPathIcon } from '@heroicons/react/24/outline';
 
 import { ErrorIcon } from '@/styles/customIcons';
 
-const ErrorScreen = () => {
+interface ErrorScreenProps {
+  onClick: () => void;
+}
+
+const ErrorScreen = ({ onClick }: ErrorScreenProps) => {
   return (
     <Box
       bg="beige"
@@ -12,9 +16,9 @@ const ErrorScreen = () => {
       alignItems="center"
       justifyContent="center"
       flexDirection="column"
-      data-testid="error-container"
+      data-testid="error-screen"
     >
-      <VStack spacing={5} gap={16}>
+      <VStack spacing={5} gap={16} data-testid="error-container">
         <ErrorIcon height={140} width={140} />
         <Text fontSize="48px" fontWeight="bold" color="black">
           Ops!
@@ -24,7 +28,7 @@ const ErrorScreen = () => {
           <br />
           Tente novamente!
         </Text>
-        <ArrowPathIcon height={48} width={48} />
+        <ArrowPathIcon height={48} width={48} onClick={onClick} />
       </VStack>
     </Box>
   );

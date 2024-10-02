@@ -4,6 +4,7 @@ import { Young_Serif } from 'next/font/google';
 import { ReactNode } from 'react';
 
 import { MainProvider } from '@/components/providers/MainProvider';
+import { ReactQueryProvider } from '@/components/providers/ReactQueryProvider/ReactQueryProvider';
 
 import { cn } from '@/lib/utils';
 
@@ -30,7 +31,9 @@ const RootLayout = ({ children }: RootLayoutProps) => {
     <html lang="pt-BR">
       <body className={cn(youngSerif.variable, 'font-primary')} suppressHydrationWarning>
         <MainProvider>
-          <ResponsiveWrapper>{children}</ResponsiveWrapper>
+          <ReactQueryProvider>
+            <ResponsiveWrapper>{children}</ResponsiveWrapper>
+          </ReactQueryProvider>
         </MainProvider>
       </body>
     </html>
