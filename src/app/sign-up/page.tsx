@@ -20,7 +20,8 @@ const SignUpPage: React.FC = () => {
     password: '',
     confirmPassword: '',
     loading: false,
-    error: null as string | null
+    error: null as string | null,
+    isEmailValid: true
   });
   const [showWarningTemplates, setShowWarningTemplates] = useState({ success: false, fail: false });
   const [passwordRequirements, setPasswordRequirements] = useState({
@@ -33,11 +34,18 @@ const SignUpPage: React.FC = () => {
 
   const router = useRouter();
 
+  const validateEmail = (email: string) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    return emailRegex.test(email);
+  };
+
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
+      isEmailValid: name === 'email' ? validateEmail(value) : prev.isEmailValid
     }));
     if (name === 'password' || name === 'confirmPassword') {
       checkPasswordRequirements(
@@ -57,7 +65,8 @@ const SignUpPage: React.FC = () => {
     });
   };
 
-  const allRequirementsMet = Object.values(passwordRequirements).every(Boolean);
+  const allRequirementsMet =
+    Object.values(passwordRequirements).every(Boolean) && formData.isEmailValid;
 
   const handleRedirectToLogin = () => {
     router.push('/login');
@@ -71,8 +80,8 @@ const SignUpPage: React.FC = () => {
     if (!email || !password || !allRequirementsMet) {
       setFormData((prev) => ({
         ...prev,
-        error: passwordRequirements.passwordsMatch
-          ? 'As senhas não conferem.'
+        error: !passwordRequirements.passwordsMatch
+          ? 'Senhas não conferem.'
           : 'Por favor, preencha todos os campos corretamente.',
         loading: false
       }));
@@ -110,7 +119,7 @@ const SignUpPage: React.FC = () => {
     }
   };
 
-  const { email, password, confirmPassword, loading, error } = formData;
+  const { email, password, confirmPassword, loading, error, isEmailValid } = formData;
 
   if (showWarningTemplates.success) {
     return <LoadingScreen />;
@@ -139,6 +148,11 @@ const SignUpPage: React.FC = () => {
                 placeholder="Insira seu e-mail..."
                 required
               />
+              {!isEmailValid && (
+                <Text color="red" fontSize={12} mt={4}>
+                  ❗ Forneça um e-mail válido.
+                </Text>
+              )}
             </Box>
 
             <Box mt={20} mb={4}>
@@ -180,7 +194,7 @@ const SignUpPage: React.FC = () => {
               />
               {error && (
                 <Text className="text-error" fontSize={12} mb={4} mt={5}>
-                  ❗{error}
+                  ❗ {error}
                 </Text>
               )}
             </Box>
@@ -190,6 +204,7 @@ const SignUpPage: React.FC = () => {
                 type="submit"
                 variant="default"
                 isLoading={loading}
+                isDisabled={!allRequirementsMet}
                 style={{
                   width: '100%',
                   color: 'white',
