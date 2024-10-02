@@ -4,12 +4,23 @@ import { useSupabase } from '@/hooks/useSupabase';
 import { ShareIcon } from '@heroicons/react/24/outline';
 import Image from 'next/image';
 import { useParams, useSearchParams } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useCallback, useState } from 'react';
 
 import Button from '@/components/atoms/Button/Button';
 import Greeting from '@/components/atoms/Greeting';
 import StarRating from '@/components/organisms/StarRating';
 import { BaseLayout } from '@/components/templates/BaseLayout';
+
+type Recipe = {
+  id: number;
+  name: string;
+  description: string;
+  preparation: string;
+  rating: number;
+  recipe_picture: string;
+  created_at: string;
+  user_id: string;
+};
 
 const RecipePage = () => {
   const searchParams = useSearchParams();
@@ -17,15 +28,14 @@ const RecipePage = () => {
   const { user } = useAuth();
   const supabase = useSupabase();
 
+  const [userData, setUserData] = useState<Recipe>();
+  const [isUserRecipe, setIsUserRecipe] = useState<boolean | null>(null);
+
   const userName = searchParams.get('user_name');
   const recipeName = searchParams.get('recipe_name');
   const recipeImage = searchParams.get('recipe_image');
   const recipeRating = searchParams.get('recipe_rating');
-  const ingredients = searchParams.get('ingredients');
-  const instructions = searchParams.get('instructions');
-  const userRecipeId = searchParams.get('user_id');
   const userImage = searchParams.get('user_image');
-  const isUserRecipe = user?.id === userRecipeId;
 
   const [ratingValue, setRatingValue] = useState<number | null>(null);
   const isButtonEnabled = ratingValue !== null;
@@ -53,6 +63,32 @@ const RecipePage = () => {
       alert(err);
     }
   };
+
+  const getRecipeData = useCallback(async () => {
+    if (!id) return;
+
+    try {
+      const { data: recipe, error } = await supabase.from('recipe').select().eq('id', id);
+
+      if (error) {
+        console.error('Error fetching user recipes', error);
+
+        return;
+      }
+
+      setUserData(recipe[0]);
+    } catch (err) {
+      console.error('Error in getUserRecipes:', err);
+    }
+  }, [id, supabase, user?.id]);
+
+  useEffect(() => {
+    getRecipeData();
+  }, [getRecipeData, user]);
+
+  useEffect(() => {
+    setIsUserRecipe(user?.id === userData?.user_id);
+  }, [userData?.user_id]);
 
   return (
     <BaseLayout>
@@ -103,17 +139,17 @@ const RecipePage = () => {
           />
         )}
         <h3 className="mt-8 text-md font-semibold">Ingredientes</h3>
-        {ingredients && (
+        {userData?.description && (
           <textarea
-            value={ingredients}
-            className="mt-2 w-full text-[#868686] text-sm rounded-md bg-transparent resize-none"
+            value={userData.description}
+            className="mt-2 w-full text-[#868686] text-sm rounded-md bg-transparent min-h-[160px] resize-none"
           />
         )}
         <h3 className="mt-8 text-md font-semibold">Modo de preparo</h3>
-        {instructions && (
+        {userData?.preparation && (
           <textarea
-            value={instructions}
-            className="mt-2 w-full text-[#868686] text-sm rounded-md bg-transparent resize-none"
+            value={userData.preparation}
+            className="mt-2 w-full text-[#868686] text-sm rounded-md bg-transparent min-h-[160px] resize-none"
           />
         )}
         {!isUserRecipe && user?.id && (
