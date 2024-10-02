@@ -175,160 +175,160 @@ const CreateRecipe: React.FC = () => {
 
   return (
     <div>
-      <BaseLayout className="overflow-hidden">
+      <BaseLayout>
         <Greeting title="Criar" isAuthenticated disableSuffix />
-        <div className="flex flex-col h-screen">
-          <form onSubmit={handleSubmit} className="w-full max-w-lg mx-auto">
-            <div className="mb-4 mt-2">
-              <TextInput
-                label="Nome da receita"
-                type="text"
-                value={recipeName}
-                onChange={(e) => setRecipeName(e.target.value)}
-                placeholder="Nome da receita"
-                required
-                className="w-full border border-gray-300 rounded-md p-2 bg-[#D9D9D9]"
+        {/* <div className="flex flex-col h-screen"> */}
+        <form onSubmit={handleSubmit} className="w-full max-w-lg mx-auto">
+          <div className="mb-4 mt-2">
+            <TextInput
+              label="Nome da receita"
+              type="text"
+              value={recipeName}
+              onChange={(e) => setRecipeName(e.target.value)}
+              placeholder="Nome da receita"
+              required
+              className="w-full border border-gray-300 rounded-md p-2 bg-[#D9D9D9]"
+            />
+          </div>
+          <label
+            style={{ color: '#2E2C25' }}
+            className="text-black-primary text-purple-600 text-sm font-bold"
+          >
+            Adicione os ingredientes
+          </label>
+          <div className="mb-4">
+            <textarea
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              placeholder="Insira os ingredientes e suas quantidades"
+              required
+              className="w-full border border-gray-300 rounded-md p-2 h-32 bg-[#D9D9D9]"
+            />
+          </div>
+          <label
+            style={{ color: '#2E2C25' }}
+            className="text-black-primary text-purple-600 text-sm font-bold"
+          >
+            Modo de preparo
+          </label>
+          <div className="mb-6">
+            <textarea
+              value={instructions}
+              onChange={(e) => setInstructions(e.target.value)}
+              placeholder="Instruções da receita"
+              required
+              className="w-full border border-gray-300 rounded-md p-2 h-32 bg-[#D9D9D9]"
+            />
+          </div>
+          {/* Category dropdown */}
+          <label
+            style={{ color: '#2E2C25' }}
+            className="text-black-primary text-purple-600 text-sm font-bold"
+          >
+            Categoria
+          </label>
+          <div className="mb-4">
+            <select
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+              required
+              className="w-full border border-gray-300 rounded-md p-2 bg-[#D9D9D9]"
+            >
+              <option value="">Selecione uma categoria</option>
+              <option value="Vegano">Vegano</option>
+              <option value="Almoço">Almoço</option>
+              <option value="Doces">Doces</option>
+              <option value="Salgados">Salgados</option>
+              <option value="Lanche da Tarde">Lanche da Tarde</option>
+              <option value="Low carb">Low carb</option>
+              <option value="Mexicana">Mexicana</option>
+              <option value="Sem glúten">Sem glúten</option>
+              <option value="Fitness">Fitness</option>
+              <option value="Jantar">Jantar</option>
+            </select>
+          </div>
+          {/* Difficulty dropdown */}
+          <label
+            style={{ color: '#2E2C25' }}
+            className="text-black-primary text-purple-600 text-sm font-bold"
+          >
+            Dificuldade
+          </label>
+          <div className="mb-4">
+            <select
+              value={difficulty}
+              onChange={(e) => setDifficulty(e.target.value)}
+              required
+              className="w-full border border-gray-300 rounded-md p-2 bg-[#D9D9D9]"
+            >
+              <option value="">Selecione a dificuldade</option>
+              <option value="Fácil">Fácil</option>
+              <option value="Médio">Médio</option>
+              <option value="Difícil">Difícil</option>
+            </select>
+          </div>
+          {/* Preparation time input */}
+          <label
+            style={{ color: '#2E2C25' }}
+            className="text-black-primary text-purple-600 text-sm font-bold"
+          >
+            Tempo de preparo (minutos)
+          </label>
+          <div className="mb-6">
+            <input
+              type="number"
+              value={prepTime}
+              onChange={(e) => setPrepTime(parseInt(e.target.value, 10))}
+              required
+              className="w-full border border-gray-300 rounded-md p-2 bg-[#D9D9D9]"
+              min={1}
+              placeholder="Tempo de preparo (minutos)"
+            />
+          </div>
+          <label htmlFor="imageUpload">
+            {imagePreview ? (
+              <Image
+                src={imagePreview}
+                alt="Uploaded"
+                width={100}
+                height={100}
+                className="w-56 h-56 object-cover rounded-md"
               />
-            </div>
-            <label
-              style={{ color: '#2E2C25' }}
-              className="text-black-primary text-purple-600 text-sm font-bold"
-            >
-              Adicione os ingredientes
-            </label>
-            <div className="mb-4">
-              <textarea
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                placeholder="Insira os ingredientes e suas quantidades"
-                required
-                className="w-full border border-gray-300 rounded-md p-2 h-32 bg-[#D9D9D9]"
-              />
-            </div>
-            <label
-              style={{ color: '#2E2C25' }}
-              className="text-black-primary text-purple-600 text-sm font-bold"
-            >
-              Modo de preparo
-            </label>
-            <div className="mb-6">
-              <textarea
-                value={instructions}
-                onChange={(e) => setInstructions(e.target.value)}
-                placeholder="Instruções da receita"
-                required
-                className="w-full border border-gray-300 rounded-md p-2 h-32 bg-[#D9D9D9]"
-              />
-            </div>
-            {/* Category dropdown */}
-            <label
-              style={{ color: '#2E2C25' }}
-              className="text-black-primary text-purple-600 text-sm font-bold"
-            >
-              Categoria
-            </label>
-            <div className="mb-4">
-              <select
-                value={category}
-                onChange={(e) => setCategory(e.target.value)}
-                required
-                className="w-full border border-gray-300 rounded-md p-2 bg-[#D9D9D9]"
-              >
-                <option value="">Selecione uma categoria</option>
-                <option value="Vegano">Vegano</option>
-                <option value="Almoço">Almoço</option>
-                <option value="Doces">Doces</option>
-                <option value="Salgados">Salgados</option>
-                <option value="Lanche da Tarde">Lanche da Tarde</option>
-                <option value="Low carb">Low carb</option>
-                <option value="Mexicana">Mexicana</option>
-                <option value="Sem glúten">Sem glúten</option>
-                <option value="Fitness">Fitness</option>
-                <option value="Jantar">Jantar</option>
-              </select>
-            </div>
-            {/* Difficulty dropdown */}
-            <label
-              style={{ color: '#2E2C25' }}
-              className="text-black-primary text-purple-600 text-sm font-bold"
-            >
-              Dificuldade
-            </label>
-            <div className="mb-4">
-              <select
-                value={difficulty}
-                onChange={(e) => setDifficulty(e.target.value)}
-                required
-                className="w-full border border-gray-300 rounded-md p-2 bg-[#D9D9D9]"
-              >
-                <option value="">Selecione a dificuldade</option>
-                <option value="Fácil">Fácil</option>
-                <option value="Médio">Médio</option>
-                <option value="Difícil">Difícil</option>
-              </select>
-            </div>
-            {/* Preparation time input */}
-            <label
-              style={{ color: '#2E2C25' }}
-              className="text-black-primary text-purple-600 text-sm font-bold"
-            >
-              Tempo de preparo (minutos)
-            </label>
-            <div className="mb-6">
-              <input
-                type="number"
-                value={prepTime}
-                onChange={(e) => setPrepTime(parseInt(e.target.value, 10))}
-                required
-                className="w-full border border-gray-300 rounded-md p-2 bg-[#D9D9D9]"
-                min={1}
-                placeholder="Tempo de preparo (minutos)"
-              />
-            </div>
-            <label htmlFor="imageUpload">
-              {imagePreview ? (
-                <Image
-                  src={imagePreview}
-                  alt="Uploaded"
-                  width={100}
-                  height={100}
-                  className="w-56 h-56 object-cover rounded-md"
-                />
-              ) : (
-                <div className="w-56 h-56 bg-[#D9D9D9] flex flex-col items-center justify-center rounded-md cursor-pointer">
-                  <PhotoIcon className="h-8 w-8 text-gray-600 mb-2" aria-hidden="true" />
-                  <span className="text-gray-600 opacity-80 text-center">
-                    Adicione uma imagem da receita
-                  </span>
-                </div>
-              )}
-            </label>
-            <div className="mb-6">
-              <input
-                name="img"
-                id="imageUpload"
-                type="file"
-                accept="image/*"
-                className="hidden"
-                onChange={handleImageChange}
-              />
-            </div>
-            {uploadError && <p className="text-red-500">{uploadError}</p>}{' '}
-            {/* Display error message */}
-            <Button
-              type="submit"
-              variant="default"
-              className={`w-full mb-20 py-2 px-4 rounded-md transition-colors duration-300 ${
-                isFormValid()
-                  ? 'bg-black-primary text-white hover:bg-blue-600'
-                  : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-              }`}
-              disabled={!isFormValid()} // Disable the button if the form is not valid
-            >
-              Criar Receita
-            </Button>
-          </form>
-        </div>
+            ) : (
+              <div className="w-56 h-56 bg-[#D9D9D9] flex flex-col items-center justify-center rounded-md cursor-pointer">
+                <PhotoIcon className="h-8 w-8 text-gray-600 mb-2" aria-hidden="true" />
+                <span className="text-gray-600 opacity-80 text-center">
+                  Adicione uma imagem da receita
+                </span>
+              </div>
+            )}
+          </label>
+          <div className="mb-6">
+            <input
+              name="img"
+              id="imageUpload"
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={handleImageChange}
+            />
+          </div>
+          {uploadError && <p className="text-red-500">{uploadError}</p>}{' '}
+          {/* Display error message */}
+          <Button
+            type="submit"
+            variant="default"
+            className={`w-full mb-20 py-2 px-4 rounded-md transition-colors duration-300 ${
+              isFormValid()
+                ? 'bg-black-primary text-white hover:bg-blue-600'
+                : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+            }`}
+            disabled={!isFormValid()} // Disable the button if the form is not valid
+          >
+            Criar Receita
+          </Button>
+        </form>
+        {/* </div> */}
       </BaseLayout>
     </div>
   );
