@@ -18,10 +18,18 @@ const SignUpPage: React.FC = () => {
   const [formData, setFormData] = useState({
     email: '',
     password: '',
+    confirmPassword: '',
     loading: false,
     error: null as string | null
   });
   const [showWarningTemplates, setShowWarningTemplates] = useState({ success: false, fail: false });
+  const [passwordRequirements, setPasswordRequirements] = useState({
+    length: false,
+    uppercase: false,
+    number: false,
+    specialChar: false,
+    passwordsMatch: false
+  });
 
   const router = useRouter();
 
@@ -31,7 +39,25 @@ const SignUpPage: React.FC = () => {
       ...prev,
       [name]: value
     }));
+    if (name === 'password' || name === 'confirmPassword') {
+      checkPasswordRequirements(
+        name === 'password' ? value : formData.password,
+        name === 'confirmPassword' ? value : formData.confirmPassword
+      );
+    }
   };
+
+  const checkPasswordRequirements = (password: string, confirmPassword: string) => {
+    setPasswordRequirements({
+      length: password.length >= 8,
+      uppercase: /[A-Z]/.test(password),
+      number: /\d/.test(password),
+      specialChar: /[@#$%^&*!]/.test(password),
+      passwordsMatch: password === confirmPassword
+    });
+  };
+
+  const allRequirementsMet = Object.values(passwordRequirements).every(Boolean);
 
   const handleRedirectToLogin = () => {
     router.push('/login');
@@ -42,10 +68,12 @@ const SignUpPage: React.FC = () => {
     setFormData((prev) => ({ ...prev, loading: true, error: null }));
 
     const { email, password } = formData;
-    if (!email || !password) {
+    if (!email || !password || !allRequirementsMet) {
       setFormData((prev) => ({
         ...prev,
-        error: 'Por favor, preencha todos os campos.',
+        error: passwordRequirements.passwordsMatch
+          ? 'As senhas não conferem.'
+          : 'Por favor, preencha todos os campos corretamente.',
         loading: false
       }));
 
@@ -82,7 +110,7 @@ const SignUpPage: React.FC = () => {
     }
   };
 
-  const { email, password, loading, error } = formData;
+  const { email, password, confirmPassword, loading, error } = formData;
 
   if (showWarningTemplates.success) {
     return <LoadingScreen />;
@@ -113,7 +141,7 @@ const SignUpPage: React.FC = () => {
               />
             </Box>
 
-            <Box mt={20} mb={29}>
+            <Box mt={20} mb={4}>
               <TextInput
                 label="Senha"
                 name="password"
@@ -122,6 +150,32 @@ const SignUpPage: React.FC = () => {
                 onChange={handleInputChange}
                 height="39px"
                 placeholder="Insira sua senha..."
+                required
+              />
+            </Box>
+
+            <Box mt={10} fontSize={12}>
+              <Text color={passwordRequirements.length ? 'green' : 'black'}>
+                - 🧂 8 caracteres ou mais
+              </Text>
+              <Text color={passwordRequirements.uppercase ? 'green' : 'black'}>
+                - 🥚 1 letra maiúscula
+              </Text>
+              <Text color={passwordRequirements.number ? 'green' : 'black'}>- 🍫 1 número</Text>
+              <Text color={passwordRequirements.specialChar ? 'green' : 'black'}>
+                - 🌶️ 1 caractere especial (para aquele tempero extra, como @, #, $)
+              </Text>
+            </Box>
+
+            <Box mt={20} mb={29}>
+              <TextInput
+                label="Confirmar Senha"
+                name="confirmPassword"
+                type="password"
+                value={confirmPassword}
+                onChange={handleInputChange}
+                height="39px"
+                placeholder="Confirme sua senha..."
                 required
               />
               {error && (
