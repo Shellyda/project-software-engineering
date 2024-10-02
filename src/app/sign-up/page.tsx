@@ -84,7 +84,7 @@ const SignUpPage: React.FC = () => {
 
         switch (error.code) {
           case 'email_address_not_authorized':
-            errorMessage = 'Forneça um e-mail real.';
+            errorMessage = 'Forneça um e-mail válido.';
             break;
           case 'user_already_exists':
             errorMessage = 'Usuário já cadastrado!';
@@ -126,7 +126,7 @@ const SignUpPage: React.FC = () => {
   if (showWarningTemplates.success) {
     return <LoadingScreen />;
   } else if (showWarningTemplates.fail) {
-    return <ErrorScreen />;
+    return <ErrorScreen onClick={() => router.push('/sign-up')} />;
   }
 
   return (

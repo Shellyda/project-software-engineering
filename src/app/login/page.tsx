@@ -80,7 +80,7 @@ const LoginPage: React.FC = () => {
   if (showWarningTemplates.success) {
     return <LoadingScreen />;
   } else if (showWarningTemplates.fail) {
-    return <ErrorScreen />;
+    return <ErrorScreen onClick={() => router.push('/login')} />;
   }
 
   return (
