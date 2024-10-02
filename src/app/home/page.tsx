@@ -189,7 +189,7 @@ const HomePage = () => {
                 title={recipe.title}
                 initialRating={recipe.rating}
                 time={recipe.preparation_time}
-                subtitle="Jantar"
+                subtitle={recipe.categories[0]}
               />
             </div>
           ))}

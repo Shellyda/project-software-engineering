@@ -193,7 +193,7 @@ const Profile = () => {
                       time={0}
                       subtitle={receipe.reviewer_name}
                       isReview
-                      name="Jorge"
+                      name={receipe.reviewer_name}
                       date={format(new Date(receipe.rating_date), 'dd/MM/yyyy')}
                     />
                   </div>
