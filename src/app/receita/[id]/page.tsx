@@ -1,9 +1,11 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 import { useAuth } from '@/hooks/useAuth';
 import { useSupabase } from '@/hooks/useSupabase';
 import { ShareIcon } from '@heroicons/react/24/outline';
 import Image from 'next/image';
 import { useParams, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { useEffect, useCallback, useState } from 'react';
 
 import Button from '@/components/atoms/Button/Button';
@@ -27,6 +29,7 @@ const RecipePage = () => {
   const { id } = useParams();
   const { user } = useAuth();
   const supabase = useSupabase();
+  const router = useRouter();
 
   const [userData, setUserData] = useState<Recipe>();
   const [isUserRecipe, setIsUserRecipe] = useState<boolean | null>(null);
@@ -107,6 +110,17 @@ const RecipePage = () => {
     }
   }, [ratingValue, user?.id]);
 
+  const handleRedirectProfile = (event: any, userId: string | undefined) => {
+    event.preventDefault();
+    if (!userId) return;
+
+    const query = new URLSearchParams({
+      user_id: userId
+    }).toString();
+
+    router.push(`/profile?${query}`);
+  };
+
   return (
     <BaseLayout>
       <Greeting
@@ -126,7 +140,10 @@ const RecipePage = () => {
           <h1 className="text-xl font-bold">{recipeName}</h1>
           <ShareIcon width={15} height={15} onClick={handleCopyLink} className="cursor-pointer" />
         </div>
-        <div className="mt-4 flex flex-row items-center">
+        <div
+          onClick={(e) => handleRedirectProfile(e, userData?.user_id)}
+          className="mt-4 flex flex-row items-center"
+        >
           {userImage && (
             <Image
               src={userImage}
@@ -137,7 +154,7 @@ const RecipePage = () => {
             />
           )}
           <div className="mx-4">
-            <p>{userName}</p>
+            <p>{userName || 'Usuário sem apelido'}</p>
             <StarRating
               style={{ width: '80px' }}
               disabled={false}

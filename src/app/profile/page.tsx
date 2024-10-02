@@ -88,14 +88,11 @@ const Profile = () => {
   }, [supabase, user?.id, userId]);
 
   const getRecipeData = useCallback(async () => {
-    const id = userData?.display_name;
+    const id = userData?.id;
     if (!id) return;
 
     try {
-      const { data: recipe, error } = await supabase
-        .from('recipe_feed')
-        .select()
-        .eq('published_by', id);
+      const { data: recipe, error } = await supabase.from('recipe_feed').select().eq('user_id', id);
 
       if (error) {
         console.error('Error fetching user recipes', error);
