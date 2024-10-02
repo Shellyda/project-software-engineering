@@ -20,8 +20,8 @@ const InputWithIcon: React.FC<InputWithIconProps> = ({ label, icon, type = 'text
     <div className="flex flex-col space-y-2">
       {label && (
         <label
-          style={{ color: '#2E2C25' }}
-          className="text-black-primary text-purple-600 text-sm font-bold"
+          style={{ color: '#2E2C25', fontSize: '14px' }}
+          className="text-black-primary text-purple-600 font-bold"
         >
           {label}
         </label>
@@ -30,7 +30,7 @@ const InputWithIcon: React.FC<InputWithIconProps> = ({ label, icon, type = 'text
         <input
           type={inputType}
           aria-label="code"
-          className="w-full px-4 py-2 border border-black rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 bg-transparent placeholder-secondary-base"
+          className="w-full text-sm px-4 py-2 border border-black rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 bg-transparent placeholder-secondary-base"
           {...props}
         />
         <div className="absolute inset-y-0 right-3 flex items-center cursor-pointer">
