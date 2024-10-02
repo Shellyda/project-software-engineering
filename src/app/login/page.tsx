@@ -150,6 +150,10 @@ const LoginPage: React.FC = () => {
               <Box mt="4rem">
                 <LinkButton onClick={handleRedirectToRegister}>Criar conta</LinkButton>
               </Box>
+
+              <Box mt="2rem">
+                <LinkButton onClick={() => router.push('/home')}>Visite sem cadastro</LinkButton>
+              </Box>
             </div>
           </form>
         </div>
