@@ -5,7 +5,7 @@ import { useSupabase } from '@/hooks/useSupabase';
 import { PhotoIcon } from '@heroicons/react/24/outline';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import React, { useState, ChangeEvent, FormEvent } from 'react';
+import React, { ChangeEvent, FormEvent, useState } from 'react';
 
 import Button from '@/components/atoms/Button/Button';
 import Greeting from '@/components/atoms/Greeting';
@@ -96,13 +96,11 @@ const CreateRecipe: React.FC = () => {
       }
 
       // Get the public URL for the uploaded image
-      const { data: urlData, error: urlError } = supabase.storage
+      const { data: urlData } = supabase.storage
         .from('bucket 1')
         .getPublicUrl(`recipe picture/${imageFile.name}`);
 
-      if (urlError) {
-        setUploadError(urlError.message);
-
+      if (!data) {
         return;
       }
 
