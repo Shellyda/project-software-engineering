@@ -42,5 +42,11 @@ export const useAuth = () => {
     return { error };
   };
 
-  return { session, user, login, logout };
+  const signUp = async (email: string, password: string) => {
+    const { data, error } = await supabase.auth.signUp({ email, password });
+
+    return { data, error };
+  };
+
+  return { session, user, login, logout, signUp };
 };
