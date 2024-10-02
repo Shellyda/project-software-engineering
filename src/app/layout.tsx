@@ -1,6 +1,5 @@
+// layout.tsx
 import '@/styles/globals.css';
-
-import { Metadata } from 'next';
 import { Young_Serif } from 'next/font/google';
 import { ReactNode } from 'react';
 
@@ -8,13 +7,15 @@ import { MainProvider } from '@/components/providers/MainProvider';
 
 import { cn } from '@/lib/utils';
 
+import ResponsiveWrapper from './responsive'; // Import the new component
+
 const youngSerif = Young_Serif({
   subsets: ['latin'],
   variable: '--font-primary',
   weight: '400'
 });
 
-export const metadata: Metadata = {
+export const metadata = {
   title: 'Me Passa a Receita aí!',
   description:
     'Me passa a receita aí? é uma plataforma que permite aos usuários explorar uma ampla variedade de receitas compartilhadas por uma comunidade de amantes da culinária. Os usuários podem contribuir compartilhando suas próprias receitas, fornecendo feedback através de comentários e avaliando as receitas que experimentam.'
@@ -29,7 +30,7 @@ const RootLayout = ({ children }: RootLayoutProps) => {
     <html lang="pt-BR">
       <body className={cn(youngSerif.variable, 'font-primary')} suppressHydrationWarning>
         <MainProvider>
-          <main>{children}</main>
+          <ResponsiveWrapper>{children}</ResponsiveWrapper>
         </MainProvider>
       </body>
     </html>

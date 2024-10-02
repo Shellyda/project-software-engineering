@@ -34,7 +34,7 @@ const SuggedtedRecipe: React.FC<SuggedtedRecipeProps> = ({
   return (
     <div
       {...divProps}
-      className={`flex items-center bg-base-beige rounded-md py-2 px-4 max-w-sm shadow-md`}
+      className={`flex items-center bg-base-beige rounded-md py-2 px-4 max-w shadow-md`}
     >
       <div className="flex flex-col">
         <div className="flex flex-row items-center justify-between">

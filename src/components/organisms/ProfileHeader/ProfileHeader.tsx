@@ -37,10 +37,8 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({
         </button>
       </div>
 
-      {/* Name */}
       <h1 className="mt-4 text-4xl text-gray-800">{name}</h1>
 
-      {/* Username and Email */}
       <div className="flex text-lg text-gray-600">
         <p className="text-xs text-gray-ds-600">@{username} </p>
         <p className="text-xs text-brown-ds">&nbsp;— {email}</p>
