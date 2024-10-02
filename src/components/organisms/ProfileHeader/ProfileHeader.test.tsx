@@ -27,7 +27,7 @@ describe('ProfileHeader Component', () => {
     // Check for the presence of name, username, and email by their text content
     screen.getByText(props.name);
     screen.getByText(`@${props.username}`);
-    screen.getByText(`— ${props.email}`);
+    screen.getByText(`${props.email}`);
   });
 
   test('calls onEdit when the edit button is clicked', () => {
