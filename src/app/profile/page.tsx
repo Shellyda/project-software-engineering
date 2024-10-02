@@ -2,6 +2,7 @@
 
 import { useAuth } from '@/hooks/useAuth';
 import { useSupabase } from '@/hooks/useSupabase';
+import { format } from 'date-fns';
 import { useRouter } from 'next/navigation';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useState, useCallback } from 'react';
@@ -21,6 +22,20 @@ type UserProfile = {
   created_at: string; // You can also use Date if you prefer parsing the timestamp
 };
 
+type Recipe = {
+  categories: string[];
+  difficulty: string;
+  ingredient_types: string[];
+  picture: string;
+  preparation_time: number;
+  published_by: string;
+  published_by_profile_picture: string;
+  published_date: string;
+  rating: number;
+  recipe_id: number;
+  title: string;
+};
+
 const Profile = () => {
   const searchParams = useSearchParams();
   const supabase = useSupabase();
@@ -29,6 +44,7 @@ const Profile = () => {
 
   const [activeTab, setActiveTab] = useState('Seu feed');
   const [userData, setuserData] = useState<UserProfile | null>(null);
+  const [recipeData, setRecipeData] = useState<Recipe[]>();
 
   const userId = searchParams.get('user_id');
   const isMyProfile = userId === null;
@@ -57,10 +73,35 @@ const Profile = () => {
     }
   }, [supabase, user?.id, userId]);
 
-  // Call getUserImage when the component mounts
+  const getRecipeData = useCallback(async () => {
+    const id = userData?.display_name;
+    if (!id) return;
+
+    try {
+      const { data: recipe, error } = await supabase
+        .from('recipe_feed')
+        .select()
+        .eq('published_by', id);
+
+      if (error) {
+        console.error('Error fetching user recipes', error);
+
+        return;
+      }
+
+      setRecipeData(recipe);
+    } catch (err) {
+      console.error('Error in getUserRecipes:', err);
+    }
+  }, [supabase, userData]);
+
   useEffect(() => {
     getUserData();
   }, [getUserData, user, userId]);
+
+  useEffect(() => {
+    getRecipeData();
+  }, [getRecipeData, user, userId]);
 
   useEffect(() => {
     const tab = searchParams.get('tab');
@@ -70,57 +111,6 @@ const Profile = () => {
       setActiveTab('Seu feed');
     }
   }, [searchParams]);
-
-  const feedRecipes = [
-    {
-      initialRating: 3,
-      time: 45,
-      type: 'Almoço',
-      name: 'Abóboras maciças',
-      date: '11/03/2001',
-      tags: ['vegano', 'fácil', 'Até 15 min']
-    },
-    {
-      initialRating: 4,
-      time: 30,
-      type: 'Jantar',
-      name: 'Salada de Quinoa',
-      date: '20/05/2022',
-      tags: ['vegetariano', 'saudável', 'Até 30 min']
-    },
-    {
-      initialRating: 5,
-      time: 60,
-      type: 'Sobremesa',
-      name: 'Bolo de Chocolate',
-      date: '12/07/2019',
-      tags: ['doce', 'favorito', 'Até 1 hora']
-    },
-    {
-      initialRating: 2,
-      time: 20,
-      type: 'Café da Manhã',
-      name: 'Panquecas Simples',
-      date: '15/08/2018',
-      tags: ['rápido', 'fácil', 'Até 20 min']
-    },
-    {
-      initialRating: 5,
-      time: 50,
-      type: 'Jantar',
-      name: 'Lasanha de Berinjela',
-      date: '25/09/2020',
-      tags: ['vegetariano', 'fácil', 'Até 1 hora']
-    },
-    {
-      initialRating: 3,
-      time: 10,
-      type: 'Lanche',
-      name: 'Sanduíche Natural',
-      date: '01/01/2023',
-      tags: ['saudável', 'rápido', 'Até 10 min']
-    }
-  ];
 
   const suggestedRecipes = [
     {
@@ -220,15 +210,16 @@ const Profile = () => {
       title: 'Seu feed',
       content: (
         <div className="flex flex-col gap-4">
-          {feedRecipes.map((recipe, index) => (
+          {recipeData?.map((recipe) => (
             <RecipeInformation
-              key={index}
-              initialRating={recipe.initialRating}
-              time={recipe.time}
-              type={recipe.type}
-              name={recipe.name}
-              date={recipe.date}
-              tags={recipe.tags}
+              key={recipe.recipe_id}
+              initialRating={recipe.rating}
+              time={recipe.preparation_time || 0}
+              type="Vegano"
+              recipeImage={recipe.picture}
+              name={recipe.title}
+              date={format(new Date(recipe.published_date), 'dd/MM/yyyy')}
+              tags={recipe.categories}
             />
           ))}
         </div>
