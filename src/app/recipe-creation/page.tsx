@@ -5,12 +5,20 @@ import { useSupabase } from '@/hooks/useSupabase';
 import { PhotoIcon } from '@heroicons/react/24/outline';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import React, { ChangeEvent, FormEvent, useState } from 'react';
+import React, { ChangeEvent, FormEvent, useState, useEffect } from 'react';
 
 import Button from '@/components/atoms/Button/Button';
 import Greeting from '@/components/atoms/Greeting';
 import TextInput from '@/components/atoms/TextInput';
 import { BaseLayout } from '@/components/templates/BaseLayout';
+
+type UserProfile = {
+  id: string;
+  display_name: string;
+  email: string;
+  profile_picture: string;
+  created_at: string; // You can also use Date if you prefer parsing the timestamp
+};
 
 const CreateRecipe: React.FC = () => {
   const supabase = useSupabase();
@@ -18,14 +26,15 @@ const CreateRecipe: React.FC = () => {
   const { user } = useAuth();
 
   const [recipeName, setRecipeName] = useState<string>('');
-  const [description, setDescription] = useState<string>(''); // Variable for the first textarea
-  const [instructions, setInstructions] = useState<string>(''); // Variable for the second textarea
-  const [imageFile, setImageFile] = useState<File | null>(null); // Variable for the image file
+  const [description, setDescription] = useState<string>('');
+  const [instructions, setInstructions] = useState<string>('');
+  const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
-  const [category, setCategory] = useState<string>(''); // Dropdown for category
-  const [difficulty, setDifficulty] = useState<string>(''); // Dropdown for difficulty
-  const [prepTime, setPrepTime] = useState<number>(0); // Input for preparation time
-  const [uploadError, setUploadError] = useState<string | null>(null); // Variable to store upload error message
+  const [category, setCategory] = useState<string>('');
+  const [difficulty, setDifficulty] = useState<string>('');
+  const [prepTime, setPrepTime] = useState<number>(0);
+  const [uploadError, setUploadError] = useState<string | null>(null);
+  const [userData, setUserData] = useState<UserProfile | null>(null);
 
   // Function to check if all form fields are filled
   const isFormValid = (): boolean => {
@@ -53,10 +62,42 @@ const CreateRecipe: React.FC = () => {
     }
   };
 
+  const getUserImage = async () => {
+    if (!user?.id) return;
+
+    try {
+      const { data: profile, error } = await supabase
+        .from('profile')
+        .select() // Select the image field
+        .eq('id', user.id) // Filter by user id
+        .single(); // Get a single record
+
+      if (error) {
+        console.error('Error fetching user image:', error);
+
+        return;
+      }
+
+      setUserData(profile); // Set the user's image in state
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  // Call getUserImage when the component mounts
+  useEffect(() => {
+    getUserImage();
+  }, [user]);
+
   // Function to handle redirecting to the recipe details page
   const handleRedirectRecipe = (recipeId: string, userId: string, imageUrl: string) => {
+    if (!userData?.profile_picture) return;
+    if (!userData?.display_name) return;
+
     const query = new URLSearchParams({
       user_id: userId, // User ID
+      user_image: userData?.profile_picture,
+      user_name: userData?.display_name,
       recipe_name: recipeName, // Recipe name
       recipe_image: imageUrl, // URL of the recipe image
       recipe_rating: '0', // Recipe initial rating

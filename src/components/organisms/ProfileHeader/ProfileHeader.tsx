@@ -9,6 +9,7 @@ interface ProfileHeaderProps {
   email: string;
   profileImage: string;
   isMyProfile: boolean;
+  editing?: boolean;
   onEdit: () => void;
   logout: () => void;
 }
@@ -19,6 +20,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({
   email,
   profileImage,
   isMyProfile,
+  editing,
   onEdit,
   logout
 }) => {
@@ -41,9 +43,9 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({
           alt={`${name}'s profile photo`}
           width={82}
           height={82}
-          className="rounded-full max-w-[82px] max-h-[82px] object-cover border border-black-primary"
+          className="rounded-full min-w-[82px] min-h-[82px] max-w-[82px] max-h-[82px] object-cover border border-black-primary"
         />
-        {isMyProfile && (
+        {isMyProfile && !editing && (
           <button
             onClick={onEdit}
             className="absolute bottom-0 right-0 p-1 bg-white rounded-full shadow hover:bg-gray-100 transition"
@@ -55,9 +57,9 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({
 
       <h1 className="mt-4 text-4xl text-gray-800">{name}</h1>
 
-      <div className="flex text-lg text-gray-600">
+      <div className="flex flex-col justify-center items-center text-lg text-gray-600">
         <p className="text-xs text-gray-ds-600">@{username} </p>
-        <p className="text-xs text-brown-ds">&nbsp;— {email}</p>
+        <p className="text-xs text-brown-ds">{email}</p>
       </div>
     </div>
   );
