@@ -4,7 +4,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { useSupabase } from '@/hooks/useSupabase';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 
 import Greeting from '@/components/atoms/Greeting';
 import LinkButton from '@/components/atoms/LinkButton';
@@ -13,252 +13,45 @@ import SuggestedReceipe from '@/components/atoms/SuggestedReceipe';
 import ReceipeCard from '@/components/molecules/ReceipeCard';
 import { BaseLayout } from '@/components/templates/BaseLayout';
 
-type Recipe = {
-  recipeId: string;
+type RecipeData = {
+  categories: string[];
+  difficulty: string;
+  ingredient_types: string[];
+  picture: string;
+  preparation_time: number;
+  published_by: string;
+  published_by_profile_picture: string;
+  published_date: string;
+  rating: number;
+  recipe_id: number;
   title: string;
-  image: string;
-  initialRating: number;
 };
-
-const recipes = [
-  {
-    recipeId: '1',
-    title: 'Spaghetti Carbonara',
-    image:
-      'https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8Zm9vZHxlbnwwfHwwfHx8MA%3D%3D',
-    initialRating: 4.5
-  },
-  {
-    recipeId: '2',
-    title: 'Chicken Tikka Masala',
-    image:
-      'https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8Zm9vZHxlbnwwfHwwfHx8MA%3D%3D',
-    initialRating: 4.7
-  },
-  {
-    recipeId: '3',
-    title: 'Beef Stroganoff',
-    image:
-      'https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8Zm9vZHxlbnwwfHwwfHx8MA%3D%3D',
-    initialRating: 4.3
-  },
-  {
-    recipeId: '4',
-    title: 'Vegetable Stir Fry',
-    image:
-      'https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8Zm9vZHxlbnwwfHwwfHx8MA%3D%3D',
-    initialRating: 4.2
-  },
-  {
-    recipeId: '5',
-    title: 'Pancakes',
-    image:
-      'https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8Zm9vZHxlbnwwfHwwfHx8MA%3D%3D',
-    initialRating: 4.8
-  },
-  {
-    recipeId: '6',
-    title: 'Caesar Salad',
-    image:
-      'https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8Zm9vZHxlbnwwfHwwfHx8MA%3D%3D',
-    initialRating: 4.6
-  },
-  {
-    recipeId: '7',
-    title: 'Grilled Salmon',
-    image:
-      'https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8Zm9vZHxlbnwwfHwwfHx8MA%3D%3D',
-    initialRating: 4.9
-  },
-  {
-    recipeId: '8',
-    title: 'Chocolate Cake',
-    image:
-      'https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8Zm9vZHxlbnwwfHwwfHx8MA%3D%3D',
-    initialRating: 4.7
-  },
-  {
-    recipeId: '9',
-    title: 'Lentil Soup',
-    image:
-      'https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8Zm9vZHxlbnwwfHwwfHx8MA%3D%3D',
-    initialRating: 4.5
-  },
-  {
-    recipeId: '10',
-    title: 'Apple Pie',
-    image:
-      'https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8Zm9vZHxlbnwwfHwwfHx8MA%3D%3D',
-    initialRating: 4.4
-  }
-];
-
-const chefs = [
-  {
-    name: 'Ashita Akaia',
-    photo:
-      'https://images.unsplash.com/photo-1654922207993-2952fec328ae?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Y2hlZnxlbnwwfHwwfHx8MA%3D%3D'
-  },
-  {
-    name: 'Ashita Akaia',
-    photo:
-      'https://images.unsplash.com/photo-1654922207993-2952fec328ae?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Y2hlZnxlbnwwfHwwfHx8MA%3D%3D'
-  },
-  {
-    name: 'Ashita Akaia',
-    photo:
-      'https://images.unsplash.com/photo-1654922207993-2952fec328ae?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Y2hlZnxlbnwwfHwwfHx8MA%3D%3D'
-  },
-  {
-    name: 'Ashita Akaia',
-    photo:
-      'https://images.unsplash.com/photo-1654922207993-2952fec328ae?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Y2hlZnxlbnwwfHwwfHx8MA%3D%3D'
-  },
-  {
-    name: 'Ashita Akaia',
-    photo:
-      'https://images.unsplash.com/photo-1654922207993-2952fec328ae?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Y2hlZnxlbnwwfHwwfHx8MA%3D%3D'
-  },
-  {
-    name: 'Ashita Akaia',
-    photo:
-      'https://images.unsplash.com/photo-1654922207993-2952fec328ae?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Y2hlZnxlbnwwfHwwfHx8MA%3D%3D'
-  },
-  {
-    name: 'Ashita Akaia',
-    photo:
-      'https://images.unsplash.com/photo-1654922207993-2952fec328ae?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Y2hlZnxlbnwwfHwwfHx8MA%3D%3D'
-  },
-  {
-    name: 'Ashita Akaia',
-    photo:
-      'https://images.unsplash.com/photo-1654922207993-2952fec328ae?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Y2hlZnxlbnwwfHwwfHx8MA%3D%3D'
-  },
-  {
-    name: 'Ashita Akaia',
-    photo:
-      'https://images.unsplash.com/photo-1654922207993-2952fec328ae?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Y2hlZnxlbnwwfHwwfHx8MA%3D%3D'
-  },
-  {
-    name: 'Ashita Akaia',
-    photo:
-      'https://images.unsplash.com/photo-1654922207993-2952fec328ae?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Y2hlZnxlbnwwfHwwfHx8MA%3D%3D'
-  }
-];
-
-const suggestedRecipes = [
-  {
-    title: 'Poke de salmão',
-    initialRating: 3,
-    time: 30,
-    subtitle: 'Almoço'
-  },
-  {
-    title: 'Frango à parmegiana',
-    initialRating: 4.5,
-    time: 45,
-    subtitle: 'Jantar'
-  },
-  {
-    title: 'Spaghetti Carbonara',
-    initialRating: 5,
-    time: 25,
-    subtitle: 'Almoço'
-  },
-  {
-    title: 'Tacos de Carne',
-    initialRating: 4,
-    time: 35,
-    subtitle: 'Jantar'
-  },
-  {
-    title: 'Salada Caesar',
-    initialRating: 4.2,
-    time: 20,
-    subtitle: 'Almoço'
-  },
-  {
-    title: 'Pizza Margherita',
-    initialRating: 5,
-    time: 50,
-    subtitle: 'Jantar'
-  },
-  {
-    title: 'Bolo de Chocolate',
-    initialRating: 4.8,
-    time: 60,
-    subtitle: 'Sobremesa'
-  },
-  {
-    title: 'Sopa de Lentilha',
-    initialRating: 4.3,
-    time: 40,
-    subtitle: 'Almoço'
-  },
-  {
-    title: 'Risoto de Cogumelos',
-    initialRating: 4.9,
-    time: 45,
-    subtitle: 'Jantar'
-  },
-  {
-    title: 'Sanduíche Caprese',
-    initialRating: 4.6,
-    time: 15,
-    subtitle: 'Lanche'
-  },
-  {
-    title: 'Torta de Limão',
-    initialRating: 4.7,
-    time: 50,
-    subtitle: 'Sobremesa'
-  },
-  {
-    title: 'Batata Gratinada',
-    initialRating: 4.4,
-    time: 40,
-    subtitle: 'Jantar'
-  },
-  {
-    title: 'Pão de Queijo',
-    initialRating: 4.9,
-    time: 25,
-    subtitle: 'Café da Manhã'
-  },
-  {
-    title: 'Lasanha Bolonhesa',
-    initialRating: 5,
-    time: 75,
-    subtitle: 'Almoço'
-  },
-  {
-    title: 'Mousse de Maracujá',
-    initialRating: 4.5,
-    time: 35,
-    subtitle: 'Sobremesa'
-  }
-];
 
 const HomePage = () => {
   const router = useRouter();
   const { user } = useAuth();
   const supabase = useSupabase();
-  const [userImage, setUserImage] = useState<string | null>(null); // State for user image
+  const [userImage, setUserImage] = useState<string | null>(null);
+  const [recipeData, setRecipeData] = useState<RecipeData[]>();
+  const [filteredRecipes, setFilteredRecipes] = useState<RecipeData[]>([]); // New state for filtered recipes
 
-  const handleClickRecipe = (event: any, recipe: Recipe) => {
+  const handleClickRecipe = (event: any, recipe: RecipeData) => {
     event.preventDefault(); // Prevent default button behavior
 
     const query = new URLSearchParams({
       recipe_name: recipe.title,
-      recipe_image: recipe.image,
-      recipe_rating: recipe.initialRating.toString(),
-      user_name: 'Amanda Nunes',
+      recipe_image: recipe.picture,
+      recipe_rating: recipe.rating?.toString(),
+      user_name: recipe.published_by,
+      user_image:
+        recipe?.published_by_profile_picture ||
+        'https://icons.veryicon.com/png/o/internet--web/prejudice/user-128.png',
       ingredients:
         'Prepare o arroz, o feijão e o macarrão alem de de tudo e muito mais que isso testando palavras aleatorias pois me prometeram um autoresize então se promoteram ainda terá Prepare o arroz, o feijão e o macarrão alem de de tudo e muito mais que isso testando palavras aleatorias pois me prometeram um autoresize então se promoteram ainda terá',
       instructions: 'Cozinhe tudo por 80 minutos e vai ser isso mesmo.'
     }).toString();
 
-    router.push(`/receita/${recipe.recipeId}?${query}`); // Redirect to recipe details page
+    router.push(`/receita/${recipe.recipe_id}?${query}`); // Redirect to recipe details page
   };
 
   const getUserImage = async () => {
@@ -288,6 +81,47 @@ const HomePage = () => {
     getUserImage();
   }, [user]);
 
+  const getRecipeData = useCallback(async () => {
+    try {
+      const { data: recipe, error } = await supabase.from('recipe_feed').select();
+
+      if (error) {
+        console.error('Error fetching user recipes', error);
+
+        return;
+      }
+
+      setRecipeData(recipe);
+    } catch (err) {
+      console.error('Error in getUserRecipes:', err);
+    }
+  }, [supabase]);
+
+  // Filter recipes to include only those with a non-null profile picture and exclude duplicates
+  useEffect(() => {
+    if (recipeData) {
+      const seenProfilePictures = new Set<string>(); // To track seen profile pictures
+      const filtered = recipeData.filter((recipe) => {
+        if (
+          recipe.published_by_profile_picture &&
+          !seenProfilePictures.has(recipe.published_by_profile_picture)
+        ) {
+          seenProfilePictures.add(recipe.published_by_profile_picture); // Add to the set if it's not a duplicate
+
+          return true; // Keep this recipe in the filtered list
+        }
+
+        return false; // Exclude this recipe
+      });
+
+      setFilteredRecipes(filtered);
+    }
+  }, [recipeData]);
+
+  useEffect(() => {
+    getRecipeData();
+  }, [getRecipeData, user]);
+
   return (
     <div>
       <BaseLayout>
@@ -298,13 +132,13 @@ const HomePage = () => {
         />
         <div className="my-4">
           <Slider>
-            {recipes.map((recipe) => (
+            {recipeData?.map((recipe) => (
               <ReceipeCard
-                key={recipe.recipeId}
-                receipeId={recipe.recipeId}
+                key={recipe.recipe_id}
+                receipeId={recipe.recipe_id.toString()}
                 title={recipe.title}
-                image={recipe.image}
-                initialRating={recipe.initialRating}
+                image={recipe.picture}
+                initialRating={recipe.rating}
                 onClick={(event) => handleClickRecipe(event, recipe)}
               />
             ))}
@@ -314,14 +148,14 @@ const HomePage = () => {
           <p className="font-light font-thin">Chefs pra você conhecer</p>
           <div className="my-4">
             <Slider>
-              {chefs.map((chef) => (
+              {filteredRecipes.map((recipe) => (
                 <Image
-                  key={chef.name}
-                  src={chef.photo}
-                  alt={chef.name}
+                  key={recipe.recipe_id}
+                  src={recipe.published_by_profile_picture || ''}
+                  alt={recipe.published_by}
                   width={80}
                   height={70}
-                  className="rounded-md mx-1 object-cover min-w-[80px] max-h-[80px]"
+                  className="rounded-md mx-1 object-cover min-w-[80px] min-h-[80px] max-h-[80px]"
                   // ADD OnClick
                 />
               ))}
@@ -333,15 +167,18 @@ const HomePage = () => {
             <p>Receitas feitas pra você</p>
             <LinkButton onClick={() => null}>ver mais</LinkButton>
           </div>
-          {suggestedRecipes.map((receipe) => (
-            <div key={receipe.title} className="my-4">
+          {recipeData?.map((recipe) => (
+            <div
+              key={recipe.title}
+              onClick={(event) => handleClickRecipe(event, recipe)}
+              className="my-4"
+            >
               <SuggestedReceipe
-                key={receipe.title}
-                title={receipe.title}
-                initialRating={receipe.initialRating}
-                time={receipe.time}
-                subtitle={receipe.subtitle}
-                // ADD Onclick
+                key={recipe.recipe_id}
+                title={recipe.title}
+                initialRating={recipe.rating}
+                time={recipe.preparation_time}
+                subtitle="Jantar"
               />
             </div>
           ))}

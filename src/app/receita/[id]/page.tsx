@@ -59,7 +59,7 @@ const RecipePage = () => {
       <Greeting
         title={isUserRecipe ? 'Sua receita' : 'Me passa aí!'}
         isAuthenticated={!!user?.id}
-        userImage={userImage as string}
+        userImage={userImage || ('' as string)}
       />
       {isUserRecipe && (
         <div>

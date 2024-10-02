@@ -10,7 +10,8 @@ const nextConfig = {
       'plus.unsplash.com',
       'images.unsplash.com',
       'gtnomugolggycmbfxvql.supabase.co',
-      'icons.veryicon.com'
+      'icons.veryicon.com',
+      'example.com'
     ]
   },
   async redirects() {
