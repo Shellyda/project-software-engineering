@@ -33,14 +33,6 @@ describe('BaseLayout', () => {
     expect(screen.getByTestId('loading-screen')).toBeInTheDocument();
   });
 
-  it('should redirect to /search when user is null and isLoading is false', () => {
-    (useAuth as jest.Mock).mockReturnValue({ isLoading: false, user: null });
-
-    render(<BaseLayout>Test Content</BaseLayout>);
-
-    expect(mockRouter.push).toHaveBeenCalledWith('/search');
-  });
-
   it('should show error screen when there is an error', () => {
     (useAuth as jest.Mock).mockReturnValue({ isLoading: false, isError: true });
 

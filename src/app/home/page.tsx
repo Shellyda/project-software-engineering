@@ -176,7 +176,7 @@ const HomePage = () => {
         <div className="my-4 mt-8">
           <div className="flex flex-row justify-between">
             <p>Receitas feitas pra você</p>
-            <LinkButton onClick={() => null}>ver mais</LinkButton>
+            <LinkButton onClick={() => router.push('/search')}>ver mais</LinkButton>
           </div>
           {recipeData?.map((recipe) => (
             <div

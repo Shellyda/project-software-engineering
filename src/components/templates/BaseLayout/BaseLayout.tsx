@@ -1,5 +1,5 @@
 import { useRouter } from 'next/navigation';
-import { ReactNode, useEffect } from 'react';
+import { ReactNode } from 'react';
 
 import { Menu } from '@/components/molecules/Menu';
 
@@ -15,12 +15,6 @@ interface BaseLayout {
 export const BaseLayout = ({ children }: BaseLayout) => {
   const router = useRouter();
   const { user, isLoading, isError } = useAuth();
-
-  useEffect(() => {
-    if (!isLoading && !user) {
-      router.push('/search');
-    }
-  }, [isLoading]);
 
   if (isLoading) {
     return <LoadingScreen />;
