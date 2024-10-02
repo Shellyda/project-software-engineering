@@ -1,6 +1,10 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 'use client';
+import { useAuth } from '@/hooks/useAuth';
+import { useSupabase } from '@/hooks/useSupabase';
 import { PhotoIcon } from '@heroicons/react/24/outline';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import React, { useState, ChangeEvent, FormEvent } from 'react';
 
 import Button from '@/components/atoms/Button/Button';
@@ -9,14 +13,19 @@ import TextInput from '@/components/atoms/TextInput';
 import { BaseLayout } from '@/components/templates/BaseLayout';
 
 const CreateRecipe: React.FC = () => {
+  const supabase = useSupabase();
+  const router = useRouter();
+  const { user } = useAuth();
+
   const [recipeName, setRecipeName] = useState<string>('');
   const [description, setDescription] = useState<string>(''); // Variable for the first textarea
   const [instructions, setInstructions] = useState<string>(''); // Variable for the second textarea
+  const [imageFile, setImageFile] = useState<File | null>(null); // Variable for the image file
   const [imagePreview, setImagePreview] = useState<string | null>(null);
-
   const [category, setCategory] = useState<string>(''); // Dropdown for category
   const [difficulty, setDifficulty] = useState<string>(''); // Dropdown for difficulty
   const [prepTime, setPrepTime] = useState<number>(0); // Input for preparation time
+  const [uploadError, setUploadError] = useState<string | null>(null); // Variable to store upload error message
 
   // Function to check if all form fields are filled
   const isFormValid = (): boolean => {
@@ -24,7 +33,7 @@ const CreateRecipe: React.FC = () => {
       recipeName.trim() !== '' &&
       description.trim() !== '' &&
       instructions.trim() !== '' &&
-      imagePreview !== null &&
+      imageFile !== null &&
       category !== '' &&
       difficulty !== '' &&
       prepTime > 0
@@ -35,6 +44,7 @@ const CreateRecipe: React.FC = () => {
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
+      setImageFile(file);
       const reader = new FileReader();
       reader.onloadend = () => {
         setImagePreview(reader.result as string);
@@ -43,41 +53,85 @@ const CreateRecipe: React.FC = () => {
     }
   };
 
-  // Handler for recipe name change
-  const handleRecipeNameChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setRecipeName(event.target.value);
-  };
+  // Function to handle redirecting to the recipe details page
+  const handleRedirectRecipe = (recipeId: string, userId: string, imageUrl: string) => {
+    const query = new URLSearchParams({
+      user_id: userId, // User ID
+      recipe_name: recipeName, // Recipe name
+      recipe_image: imageUrl, // URL of the recipe image
+      recipe_rating: '0', // Recipe initial rating
+      ingredients: description, // Ingredients description
+      instructions: instructions // Cooking instructions
+    }).toString();
 
-  // Handler for description change
-  const handleDescriptionChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
-    setDescription(event.target.value);
-  };
-
-  // Handler for instructions change
-  const handleInstructionsChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
-    setInstructions(event.target.value);
-  };
-
-  // Handler for category dropdown change
-  const handleCategoryChange = (event: ChangeEvent<HTMLSelectElement>) => {
-    setCategory(event.target.value);
-  };
-
-  // Handler for difficulty dropdown change
-  const handleDifficultyChange = (event: ChangeEvent<HTMLSelectElement>) => {
-    setDifficulty(event.target.value);
-  };
-
-  // Handler for preparation time change
-  const handlePrepTimeChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setPrepTime(parseInt(event.target.value, 10));
+    router.push(`/receita/${recipeId}?${query}`); // Redirects to the recipe details page
   };
 
   // Handler for form submission
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!isFormValid()) return;
-    // Submit logic here
+
+    if (!user?.id) return;
+
+    if (!imageFile) {
+      setUploadError('Please select an image file before submitting.');
+
+      return;
+    }
+
+    try {
+      // Upload the image to Supabase storage
+      const { data, error } = await supabase.storage
+        .from('bucket 1')
+        .upload(`recipe picture/${imageFile!.name}`, imageFile, {
+          cacheControl: '3600',
+          upsert: false
+        });
+
+      if (error) {
+        setUploadError(error.message);
+
+        return;
+      }
+
+      // Get the public URL for the uploaded image
+      const { data: urlData, error: urlError } = supabase.storage
+        .from('bucket 1')
+        .getPublicUrl(`recipe picture/${imageFile.name}`);
+
+      if (urlError) {
+        setUploadError(urlError.message);
+
+        return;
+      }
+
+      const imageUrl = urlData.publicUrl;
+
+      // Call the upsert_recipe function
+      const { data: recipeData, error: dbError } = await supabase.rpc('upsert_recipe', {
+        _recipe_id: null,
+        _user_id: user?.id, // GET USER ID
+        _name: recipeName,
+        _description: description,
+        _preparation: instructions,
+        _recipe_picture: imageUrl, // Pass the public URL of the uploaded image
+        _preparation_time: prepTime,
+        _difficulty: difficulty,
+        _categories: [category]
+      });
+
+      if (dbError) {
+        setUploadError(dbError.message);
+
+        return;
+      }
+
+      handleRedirectRecipe(recipeData.toString(), user?.id, imageUrl);
+    } catch (err) {
+      setUploadError('An unexpected error occurred. Please try again.');
+      console.error(err);
+    }
   };
 
   return (
@@ -91,13 +145,12 @@ const CreateRecipe: React.FC = () => {
                 label="Nome da receita"
                 type="text"
                 value={recipeName}
-                onChange={handleRecipeNameChange}
+                onChange={(e) => setRecipeName(e.target.value)}
                 placeholder="Nome da receita"
                 required
                 className="w-full border border-gray-300 rounded-md p-2 bg-[#D9D9D9]"
               />
             </div>
-
             <label
               style={{ color: '#2E2C25' }}
               className="text-black-primary text-purple-600 text-sm font-bold"
@@ -107,13 +160,12 @@ const CreateRecipe: React.FC = () => {
             <div className="mb-4">
               <textarea
                 value={description}
-                onChange={handleDescriptionChange}
+                onChange={(e) => setDescription(e.target.value)}
                 placeholder="Insira os ingredientes e suas quantidades"
                 required
                 className="w-full border border-gray-300 rounded-md p-2 h-32 bg-[#D9D9D9]"
               />
             </div>
-
             <label
               style={{ color: '#2E2C25' }}
               className="text-black-primary text-purple-600 text-sm font-bold"
@@ -123,13 +175,12 @@ const CreateRecipe: React.FC = () => {
             <div className="mb-6">
               <textarea
                 value={instructions}
-                onChange={handleInstructionsChange}
+                onChange={(e) => setInstructions(e.target.value)}
                 placeholder="Instruções da receita"
                 required
                 className="w-full border border-gray-300 rounded-md p-2 h-32 bg-[#D9D9D9]"
               />
             </div>
-
             {/* Category dropdown */}
             <label
               style={{ color: '#2E2C25' }}
@@ -140,7 +191,7 @@ const CreateRecipe: React.FC = () => {
             <div className="mb-4">
               <select
                 value={category}
-                onChange={handleCategoryChange}
+                onChange={(e) => setCategory(e.target.value)}
                 required
                 className="w-full border border-gray-300 rounded-md p-2 bg-[#D9D9D9]"
               >
@@ -157,7 +208,6 @@ const CreateRecipe: React.FC = () => {
                 <option value="Jantar">Jantar</option>
               </select>
             </div>
-
             {/* Difficulty dropdown */}
             <label
               style={{ color: '#2E2C25' }}
@@ -168,7 +218,7 @@ const CreateRecipe: React.FC = () => {
             <div className="mb-4">
               <select
                 value={difficulty}
-                onChange={handleDifficultyChange}
+                onChange={(e) => setDifficulty(e.target.value)}
                 required
                 className="w-full border border-gray-300 rounded-md p-2 bg-[#D9D9D9]"
               >
@@ -178,7 +228,6 @@ const CreateRecipe: React.FC = () => {
                 <option value="Difícil">Difícil</option>
               </select>
             </div>
-
             {/* Preparation time input */}
             <label
               style={{ color: '#2E2C25' }}
@@ -190,14 +239,13 @@ const CreateRecipe: React.FC = () => {
               <input
                 type="number"
                 value={prepTime}
-                onChange={handlePrepTimeChange}
+                onChange={(e) => setPrepTime(parseInt(e.target.value, 10))}
                 required
                 className="w-full border border-gray-300 rounded-md p-2 bg-[#D9D9D9]"
                 min={1}
                 placeholder="Tempo de preparo (minutos)"
               />
             </div>
-
             <label htmlFor="imageUpload">
               {imagePreview ? (
                 <Image
@@ -216,7 +264,6 @@ const CreateRecipe: React.FC = () => {
                 </div>
               )}
             </label>
-
             <div className="mb-6">
               <input
                 name="img"
@@ -227,7 +274,8 @@ const CreateRecipe: React.FC = () => {
                 onChange={handleImageChange}
               />
             </div>
-
+            {uploadError && <p className="text-red-500">{uploadError}</p>}{' '}
+            {/* Display error message */}
             <Button
               type="submit"
               variant="default"

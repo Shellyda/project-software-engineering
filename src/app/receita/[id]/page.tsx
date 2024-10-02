@@ -1,4 +1,6 @@
 'use client';
+import { useAuth } from '@/hooks/useAuth';
+import { useSupabase } from '@/hooks/useSupabase';
 import { ShareIcon } from '@heroicons/react/24/outline';
 import Image from 'next/image';
 import { useParams, useSearchParams } from 'next/navigation';
@@ -10,20 +12,19 @@ import StarRating from '@/components/organisms/StarRating';
 import { BaseLayout } from '@/components/templates/BaseLayout';
 
 const RecipePage = () => {
-  const params = useParams();
-  const { id } = params;
-
-  const userId = 'exampleUserId';
-
   const searchParams = useSearchParams();
+  const { id } = useParams();
+  const { user } = useAuth();
+  const supabase = useSupabase();
+
   const userName = searchParams.get('user_name');
   const recipeName = searchParams.get('recipe_name');
   const recipeImage = searchParams.get('recipe_image');
   const recipeRating = searchParams.get('recipe_rating');
   const ingredients = searchParams.get('ingredients');
   const instructions = searchParams.get('instructions');
-
-  const isUserRecipe = id === userId;
+  const userRecipeId = searchParams.get('user_id');
+  const isUserRecipe = user?.id === userRecipeId;
 
   const [ratingValue, setRatingValue] = useState<number | null>(null);
   const isButtonEnabled = ratingValue !== null;
@@ -42,6 +43,16 @@ const RecipePage = () => {
     }
   };
 
+  const deleteRecipe = async () => {
+    if (!id) return;
+
+    try {
+      await supabase.from('recipe').delete().eq('id', id);
+    } catch (err) {
+      alert(err);
+    }
+  };
+
   return (
     <BaseLayout>
       <Greeting
@@ -51,9 +62,6 @@ const RecipePage = () => {
       />
       {isUserRecipe && (
         <div>
-          <p className="color-base-beige text-xs" style={{ color: '#7B4D1F' }}>
-            Edite ou adicione informações...
-          </p>
           <p className="color-base-beige text-xs" style={{ color: '#7B4D1F' }}>
             Passa essa receita por aí!
           </p>
@@ -95,33 +103,49 @@ const RecipePage = () => {
         )}
         <h3 className="mt-8 text-md font-semibold">Ingredientes</h3>
         {ingredients && (
-          <p className="mt-2 w-full text-[#868686] text-sm rounded-md bg-transparent resize-none">
-            {ingredients}
-          </p>
+          <textarea
+            value={ingredients}
+            className="mt-2 w-full text-[#868686] text-sm rounded-md bg-transparent resize-none"
+          />
         )}
         <h3 className="mt-8 text-md font-semibold">Modo de preparo</h3>
         {instructions && (
-          <p className="mt-2 w-full text-[#868686] text-sm rounded-md bg-transparent resize-none">
-            {instructions}
-          </p>
+          <textarea
+            value={instructions}
+            className="mt-2 w-full text-[#868686] text-sm rounded-md bg-transparent resize-none"
+          />
         )}
-        <h3 className="mt-8 mb-2 text-md font-semibold">
-          Avalie essa receita! Qual nota ela merece?
-        </h3>
-        <StarRating style={{ width: '50%' }} onVote={handleVote} />
+        {!isUserRecipe && user?.id && (
+          <>
+            <h3 className="mt-8 mb-2 text-md font-semibold">
+              Avalie essa receita! Qual nota ela merece?
+            </h3>
+            <StarRating style={{ width: '50%' }} onVote={handleVote} />
+            <Button
+              variant="default"
+              disabled={isButtonEnabled}
+              style={{ width: '200px', height: '50px' }}
+              className={`mt-4 w-full mb-6 py-2 px-4 rounded-md transition-colors duration-300 ${
+                isButtonEnabled
+                  ? 'bg-black-primary text-white hover:bg-blue-600'
+                  : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+              }`}
+            >
+              Enviar
+            </Button>
+          </>
+        )}
+      </div>
+      {isUserRecipe && (
         <Button
           variant="default"
-          disabled={isButtonEnabled}
-          style={{ width: '200px', height: '50px' }}
-          className={`mt-4 w-full mb-6 py-2 px-4 rounded-md transition-colors duration-300 ${
-            isButtonEnabled
-              ? 'bg-black-primary text-white hover:bg-blue-600'
-              : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-          }`}
+          style={{ width: '100%', height: '50px', background: '#e80d0d', color: 'white' }}
+          className="mt-4 w-full mb-6 py-2 px-4 rounded-md"
+          onClick={deleteRecipe}
         >
-          Enviar
+          Deletar receita
         </Button>
-      </div>
+      )}
     </BaseLayout>
   );
 };
