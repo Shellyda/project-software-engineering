@@ -12,6 +12,15 @@ const nextConfig = {
       'gtnomugolggycmbfxvql.supabase.co',
       'icons.veryicon.com'
     ]
+  },
+  async redirects() {
+    return [
+      {
+        source: '/',
+        destination: '/presentation',
+        permanent: true
+      }
+    ];
   }
 };
 
