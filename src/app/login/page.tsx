@@ -13,13 +13,16 @@ import ErrorScreen from '@/components/templates/ErrorScreen/ErrorScreen';
 import { LoadingScreen } from '@/components/templates/LoadingScreen';
 import { MainLayout } from '@/components/templates/MainLayout';
 
+import validateEmail from '@/lib/utils/forms/validateEmail';
+
 const LoginPage: React.FC = () => {
   const { login } = useAuth();
   const [formData, setFormData] = useState({
     email: '',
     password: '',
     loading: false,
-    error: null as string | null
+    error: null as string | null,
+    isEmailValid: true
   });
   const [showWarningTemplates, setShowWarningTemplates] = useState({ success: false, fail: false });
   const router = useRouter();
@@ -28,7 +31,8 @@ const LoginPage: React.FC = () => {
     const { name, value } = event.target;
     setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
+      isEmailValid: name === 'email' ? validateEmail(value) : prev.isEmailValid
     }));
   };
 
@@ -81,7 +85,7 @@ const LoginPage: React.FC = () => {
     }
   };
 
-  const { email, password, loading, error } = formData;
+  const { email, password, loading, error, isEmailValid } = formData;
 
   if (showWarningTemplates.success) {
     return <LoadingScreen />;
@@ -110,6 +114,11 @@ const LoginPage: React.FC = () => {
                 placeholder="Insira seu e-mail..."
                 required
               />
+              {!isEmailValid && (
+                <Text color="red" fontSize={12} mt={4}>
+                  ❗ Forneça um e-mail válido.
+                </Text>
+              )}
             </Box>
 
             <Box mt={20} mb={29}>
@@ -135,12 +144,14 @@ const LoginPage: React.FC = () => {
                 type="submit"
                 variant="default"
                 isLoading={loading}
+                isDisabled={!(email && password && !error && isEmailValid)}
                 style={{
                   width: '100%',
                   color: 'white',
                   height: 46,
                   borderRadius: 10
                 }}
+                _disabled={{ opacity: 0.5 }}
                 className="bg-secondary-base"
               >
                 Entrar
