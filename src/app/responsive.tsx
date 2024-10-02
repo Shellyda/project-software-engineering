@@ -1,16 +1,14 @@
-// components/ResponsiveWrapper.tsx
 'use client';
-import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
 
-import { MainLayout } from '@/components/templates/MainLayout';
+import { LogoIcon } from '@/styles/customIcons';
 
-import Logo from '../../public/Logo.svg'; // Adjust the path as necessary
+import { MainLayout } from '@/components/templates/MainLayout';
 
 const RenderWarnComponent = () => (
   <MainLayout>
     <div className="flex flex-col justify-center items-center h-screen">
-      <Image alt="Logo" src={Logo} />
+      <LogoIcon height={88} width={88} />
       <text className="text-xl text-center mt-8">
         Pedimos desculpas! Nosso time ainda está trabalhando em novas versões para Desktop.
       </text>

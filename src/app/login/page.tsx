@@ -146,7 +146,7 @@ const LoginPage: React.FC = () => {
                 Entrar
               </Button>
 
-              <Box mt="18px">
+              <Box mt="4rem">
                 <LinkButton onClick={handleRedirectToRegister}>Criar conta</LinkButton>
               </Box>
             </div>
