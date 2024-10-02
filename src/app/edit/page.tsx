@@ -145,6 +145,17 @@ const Edit = () => {
     checkIfModified(displayName, imageFile);
   }, [displayName, imageFile]);
 
+  const handleDeleteAccount = async () => {
+    if (!user?.id) return;
+
+    try {
+      await supabase.from('profile').delete().eq('id', user?.id);
+      logout();
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   return (
     <div>
       <BaseLayout>
@@ -212,6 +223,14 @@ const Edit = () => {
           </Button>
           {uploadError && <p className="text-red-500 mt-2">{uploadError}</p>}
         </form>
+        <Button
+          variant="default"
+          style={{ width: '100%', height: '50px', background: '#e80d0d', color: 'white' }}
+          className="mt-2 w-full mb-6 py-2 px-4 rounded-md"
+          onClick={handleDeleteAccount}
+        >
+          Deletar conta
+        </Button>
       </BaseLayout>
     </div>
   );

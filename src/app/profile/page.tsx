@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
 import { useAuth } from '@/hooks/useAuth';
@@ -36,6 +37,18 @@ type Recipe = {
   title: string;
 };
 
+type Rating = {
+  rating_id: number;
+  rating: number;
+  rating_date: string;
+  recipe_id: number;
+  recipe_name: string;
+  recipe_picture: string;
+  review: string | null;
+  reviewer_name: string;
+  reviewer_profile_picture: string;
+};
+
 const Profile = () => {
   const searchParams = useSearchParams();
   const supabase = useSupabase();
@@ -45,6 +58,7 @@ const Profile = () => {
   const [activeTab, setActiveTab] = useState('Seu feed');
   const [userData, setuserData] = useState<UserProfile | null>(null);
   const [recipeData, setRecipeData] = useState<Recipe[]>();
+  const [suggestedRecipes, setSuggestedRecipes] = useState<Rating[]>();
 
   const userId = searchParams.get('user_id');
   const isMyProfile = userId === null;
@@ -103,6 +117,20 @@ const Profile = () => {
     getRecipeData();
   }, [getRecipeData, user, userId]);
 
+  const handleReviews = useCallback(async () => {
+    if (!user?.id) return;
+
+    const { data } = await supabase.rpc('get_user_recipe_ratings', {
+      _user_id: user?.id
+    });
+
+    setSuggestedRecipes(data);
+  }, [user?.id]);
+
+  useEffect(() => {
+    handleReviews();
+  }, [handleReviews]);
+
   useEffect(() => {
     const tab = searchParams.get('tab');
     if (tab === 'reviews') {
@@ -112,98 +140,24 @@ const Profile = () => {
     }
   }, [searchParams]);
 
-  const suggestedRecipes = [
-    {
-      title: 'Poke de salmão',
-      initialRating: 3,
-      time: 30,
-      subtitle: 'Almoço'
-    },
-    {
-      title: 'Frango à parmegiana',
-      initialRating: 4.5,
-      time: 45,
-      subtitle: 'Jantar'
-    },
-    {
-      title: 'Spaghetti Carbonara',
-      initialRating: 5,
-      time: 25,
-      subtitle: 'Almoço'
-    },
-    {
-      title: 'Tacos de Carne',
-      initialRating: 4,
-      time: 35,
-      subtitle: 'Jantar'
-    },
-    {
-      title: 'Salada Caesar',
-      initialRating: 4.2,
-      time: 20,
-      subtitle: 'Almoço'
-    },
-    {
-      title: 'Pizza Margherita',
-      initialRating: 5,
-      time: 50,
-      subtitle: 'Jantar'
-    },
-    {
-      title: 'Bolo de Chocolate',
-      initialRating: 4.8,
-      time: 60,
-      subtitle: 'Sobremesa'
-    },
-    {
-      title: 'Sopa de Lentilha',
-      initialRating: 4.3,
-      time: 40,
-      subtitle: 'Almoço'
-    },
-    {
-      title: 'Risoto de Cogumelos',
-      initialRating: 4.9,
-      time: 45,
-      subtitle: 'Jantar'
-    },
-    {
-      title: 'Sanduíche Caprese',
-      initialRating: 4.6,
-      time: 15,
-      subtitle: 'Lanche'
-    },
-    {
-      title: 'Torta de Limão',
-      initialRating: 4.7,
-      time: 50,
-      subtitle: 'Sobremesa'
-    },
-    {
-      title: 'Batata Gratinada',
-      initialRating: 4.4,
-      time: 40,
-      subtitle: 'Jantar'
-    },
-    {
-      title: 'Pão de Queijo',
-      initialRating: 4.9,
-      time: 25,
-      subtitle: 'Café da Manhã'
-    },
-    {
-      title: 'Lasanha Bolonhesa',
-      initialRating: 5,
-      time: 75,
-      subtitle: 'Almoço'
-    },
-    {
-      title: 'Mousse de Maracujá',
-      initialRating: 4.5,
-      time: 35,
-      subtitle: 'Sobremesa'
-    }
-  ];
+  const handleClickRecipe = (event: any, recipe: Recipe) => {
+    event.preventDefault(); // Prevent default button behavior
+
+    const query = new URLSearchParams({
+      recipe_name: recipe.title,
+      recipe_image: recipe.picture,
+      recipe_rating: recipe.rating?.toString(),
+      user_name: recipe.published_by,
+      user_image:
+        recipe?.published_by_profile_picture ||
+        'https://icons.veryicon.com/png/o/internet--web/prejudice/user-128.png',
+      ingredients:
+        'Prepare o arroz, o feijão e o macarrão alem de de tudo e muito mais que isso testando palavras aleatorias pois me prometeram um autoresize então se promoteram ainda terá Prepare o arroz, o feijão e o macarrão alem de de tudo e muito mais que isso testando palavras aleatorias pois me prometeram um autoresize então se promoteram ainda terá',
+      instructions: 'Cozinhe tudo por 80 minutos e vai ser isso mesmo.'
+    }).toString();
+
+    router.push(`/receita/${recipe.recipe_id}?${query}`); // Redirect to recipe details page
+  };
 
   const tabs = [
     {
@@ -220,6 +174,7 @@ const Profile = () => {
               name={recipe.title}
               date={format(new Date(recipe.published_date), 'dd/MM/yyyy')}
               tags={recipe.categories}
+              onClick={(event) => handleClickRecipe(event, recipe)}
             />
           ))}
         </div>
@@ -232,17 +187,17 @@ const Profile = () => {
             title: 'Reviews',
             content: (
               <div>
-                {suggestedRecipes.map((receipe) => (
-                  <div key={receipe.title} className="mt-4">
+                {suggestedRecipes?.map((receipe) => (
+                  <div key={receipe.recipe_name} className="mt-4">
                     <SuggestedReceipe
-                      key={receipe.title}
-                      title={receipe.title}
-                      initialRating={receipe.initialRating}
-                      time={receipe.time}
-                      subtitle={receipe.subtitle}
+                      key={receipe.recipe_id}
+                      title={receipe.recipe_name}
+                      initialRating={receipe.rating}
+                      time={0}
+                      subtitle={receipe.reviewer_name}
                       isReview
                       name="Jorge"
-                      date="22/07/2024"
+                      date={format(new Date(receipe.rating_date), 'dd/MM/yyyy')}
                     />
                   </div>
                 ))}

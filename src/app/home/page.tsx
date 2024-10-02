@@ -25,6 +25,7 @@ type RecipeData = {
   rating: number;
   recipe_id: number;
   title: string;
+  user_id: string;
 };
 
 const HomePage = () => {
@@ -52,6 +53,16 @@ const HomePage = () => {
     }).toString();
 
     router.push(`/receita/${recipe.recipe_id}?${query}`); // Redirect to recipe details page
+  };
+
+  const handleRedirectProfile = (event: any, userId: string) => {
+    event.preventDefault();
+
+    const query = new URLSearchParams({
+      user_id: userId
+    }).toString();
+
+    router.push(`/profile?${query}`);
   };
 
   const getUserImage = async () => {
@@ -156,7 +167,7 @@ const HomePage = () => {
                   width={80}
                   height={70}
                   className="rounded-md mx-1 object-cover min-w-[80px] min-h-[80px] max-h-[80px]"
-                  // ADD OnClick
+                  onClick={(e) => handleRedirectProfile(e, recipe.user_id)}
                 />
               ))}
             </Slider>

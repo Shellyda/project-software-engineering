@@ -99,7 +99,10 @@ const RecipePage = () => {
         .from('recipe_rating')
         .insert([{ recipe_id: id, user_id: user?.id, rating: ratingValue }])
         .select();
+
+      setRatingValue(null);
     } catch (err) {
+      setRatingValue(null);
       console.error('Error fetching user recipes', err);
     }
   }, [ratingValue, user?.id]);
