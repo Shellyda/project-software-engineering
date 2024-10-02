@@ -1,5 +1,4 @@
 'use client';
-
 import { useAuth } from '@/hooks/useAuth';
 import { Box, Button, Text } from '@chakra-ui/react';
 import { useRouter } from 'next/navigation';
@@ -13,6 +12,8 @@ import ErrorScreen from '@/components/templates/ErrorScreen/ErrorScreen';
 import { LoadingScreen } from '@/components/templates/LoadingScreen';
 import { MainLayout } from '@/components/templates/MainLayout';
 
+import validateEmail from '@/lib/utils/forms/validateEmail';
+
 const SignUpPage: React.FC = () => {
   const { signUp } = useAuth();
   const [formData, setFormData] = useState({
@@ -24,6 +25,7 @@ const SignUpPage: React.FC = () => {
     isEmailValid: true
   });
   const [showWarningTemplates, setShowWarningTemplates] = useState({ success: false, fail: false });
+  const [showPasswordsMatchingError, setPasswordMatchingError] = useState(false);
   const [passwordRequirements, setPasswordRequirements] = useState({
     length: false,
     uppercase: false,
@@ -34,12 +36,6 @@ const SignUpPage: React.FC = () => {
 
   const router = useRouter();
 
-  const validateEmail = (email: string) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-    return emailRegex.test(email);
-  };
-
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     setFormData((prev) => ({
@@ -47,6 +43,7 @@ const SignUpPage: React.FC = () => {
       [name]: value,
       isEmailValid: name === 'email' ? validateEmail(value) : prev.isEmailValid
     }));
+
     if (name === 'password' || name === 'confirmPassword') {
       checkPasswordRequirements(
         name === 'password' ? value : formData.password,
@@ -56,13 +53,16 @@ const SignUpPage: React.FC = () => {
   };
 
   const checkPasswordRequirements = (password: string, confirmPassword: string) => {
+    const passwordsMatch = password === confirmPassword;
     setPasswordRequirements({
       length: password.length >= 8,
       uppercase: /[A-Z]/.test(password),
       number: /\d/.test(password),
       specialChar: /[@#$%^&*!]/.test(password),
-      passwordsMatch: password === confirmPassword
+      passwordsMatch
     });
+
+    setPasswordMatchingError(!passwordsMatch);
   };
 
   const allRequirementsMet =
@@ -76,25 +76,12 @@ const SignUpPage: React.FC = () => {
     event.preventDefault();
     setFormData((prev) => ({ ...prev, loading: true, error: null }));
 
-    const { email, password } = formData;
-    if (!email || !password || !allRequirementsMet) {
-      setFormData((prev) => ({
-        ...prev,
-        error: !passwordRequirements.passwordsMatch
-          ? 'Senhas não conferem.'
-          : 'Por favor, preencha todos os campos corretamente.',
-        loading: false
-      }));
-
-      return;
-    }
-
     try {
-      const { error } = await signUp(email, password);
+      const { error } = await signUp(formData.email, formData.password);
       if (error) {
         setFormData((prev) => ({
           ...prev,
-          error: 'Credenciais inválidas. Por favor, tente novamente.'
+          error: 'Algo deu errado... Por favor, tente novamente em alguns minutos.'
         }));
       } else {
         setShowWarningTemplates((prev) => ({
@@ -192,6 +179,11 @@ const SignUpPage: React.FC = () => {
                 placeholder="Confirme sua senha..."
                 required
               />
+              {showPasswordsMatchingError && (
+                <Text className="text-error" fontSize={12} mb={4} mt={5}>
+                  ❗ Senhas não conferem.
+                </Text>
+              )}
               {error && (
                 <Text className="text-error" fontSize={12} mb={4} mt={5}>
                   ❗ {error}
@@ -211,6 +203,7 @@ const SignUpPage: React.FC = () => {
                   height: 46,
                   borderRadius: 10
                 }}
+                _disabled={{ opacity: 0.5 }}
                 className="bg-secondary-base"
               >
                 Criar conta
