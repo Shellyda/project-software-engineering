@@ -90,6 +90,20 @@ const RecipePage = () => {
     setIsUserRecipe(user?.id === userData?.user_id);
   }, [userData?.user_id]);
 
+  const handleRating = useCallback(async () => {
+    if (!ratingValue) return;
+    if (!user?.id) return;
+
+    try {
+      await supabase
+        .from('recipe_rating')
+        .insert([{ recipe_id: id, user_id: user?.id, rating: ratingValue }])
+        .select();
+    } catch (err) {
+      console.error('Error fetching user recipes', err);
+    }
+  }, [ratingValue, user?.id]);
+
   return (
     <BaseLayout>
       <Greeting
@@ -159,8 +173,9 @@ const RecipePage = () => {
             </h3>
             <StarRating style={{ width: '50%' }} onVote={handleVote} />
             <Button
+              onClick={handleRating}
               variant="default"
-              disabled={isButtonEnabled}
+              disabled={!recipeRating}
               style={{ width: '200px', height: '50px' }}
               className={`mt-4 w-full mb-6 py-2 px-4 rounded-md transition-colors duration-300 ${
                 isButtonEnabled
