@@ -125,7 +125,7 @@ const LoginPage: React.FC = () => {
               />
               {error && (
                 <Text className="text-error" fontSize={12} mb={4} mt={5}>
-                  ❗{error}
+                  ❗ {error}
                 </Text>
               )}
             </Box>
