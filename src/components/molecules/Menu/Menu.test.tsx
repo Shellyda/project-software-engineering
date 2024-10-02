@@ -45,7 +45,7 @@ describe('Menu Component', () => {
     const homeIconButton = screen.getByTestId('solid-icon');
     fireEvent.click(homeIconButton);
 
-    expect(mockPush).toHaveBeenCalledWith('home');
+    expect(mockPush).toHaveBeenCalledWith('/home');
   });
 
   it('correctly sets the active route for search', () => {
