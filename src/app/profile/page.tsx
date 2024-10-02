@@ -2,6 +2,7 @@
 
 import { useAuth } from '@/hooks/useAuth';
 import { useSupabase } from '@/hooks/useSupabase';
+import { useRouter } from 'next/navigation';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useState, useCallback } from 'react';
 
@@ -23,6 +24,7 @@ type UserProfile = {
 const Profile = () => {
   const searchParams = useSearchParams();
   const supabase = useSupabase();
+  const router = useRouter();
   const { user, logout } = useAuth();
 
   const [activeTab, setActiveTab] = useState('Seu feed');
@@ -266,7 +268,7 @@ const Profile = () => {
       <BaseLayout>
         {userData?.display_name && (
           <ProfileHeader
-            onEdit={() => null}
+            onEdit={() => router.push('/edit')}
             logout={logout}
             isMyProfile={isMyProfile && !!user?.id}
             name={userData?.display_name}

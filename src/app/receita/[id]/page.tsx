@@ -24,6 +24,7 @@ const RecipePage = () => {
   const ingredients = searchParams.get('ingredients');
   const instructions = searchParams.get('instructions');
   const userRecipeId = searchParams.get('user_id');
+  const userImage = searchParams.get('user_image');
   const isUserRecipe = user?.id === userRecipeId;
 
   const [ratingValue, setRatingValue] = useState<number | null>(null);
@@ -58,7 +59,7 @@ const RecipePage = () => {
       <Greeting
         title={isUserRecipe ? 'Sua receita' : 'Me passa aí!'}
         isAuthenticated={!!user?.id}
-        userImage={recipeImage as string}
+        userImage={userImage as string}
       />
       {isUserRecipe && (
         <div>
@@ -73,9 +74,9 @@ const RecipePage = () => {
           <ShareIcon width={15} height={15} onClick={handleCopyLink} className="cursor-pointer" />
         </div>
         <div className="mt-4 flex flex-row items-center">
-          {recipeImage && (
+          {userImage && (
             <Image
-              src={recipeImage}
+              src={userImage}
               alt={`${userName}'s Recipe`}
               className="max-h-[40px] min-h-[40px] h-auto rounded-full object-cover border border-[#3D2D1D]"
               height={40}
