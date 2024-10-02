@@ -32,7 +32,7 @@ const RecipePage = () => {
   const router = useRouter();
 
   const [userData, setUserData] = useState<Recipe>();
-  const [isUserRecipe, setIsUserRecipe] = useState<boolean | null>(null);
+  const [isUserRecipe, setIsUserRecipe] = useState<boolean | null>(false);
 
   const userName = searchParams.get('user_name');
   const recipeName = searchParams.get('recipe_name');
@@ -90,7 +90,9 @@ const RecipePage = () => {
   }, [getRecipeData, user]);
 
   useEffect(() => {
-    setIsUserRecipe(user?.id === userData?.user_id);
+    if (userData?.id) {
+      setIsUserRecipe(user?.id === userData?.user_id);
+    }
   }, [userData?.user_id]);
 
   const handleRating = useCallback(async () => {
