@@ -171,7 +171,7 @@ const HomePage = () => {
             <div
               key={recipe.title}
               onClick={(event) => handleClickRecipe(event, recipe)}
-              className="my-4"
+              className="suggested my-4"
             >
               <SuggestedReceipe
                 key={recipe.recipe_id}
