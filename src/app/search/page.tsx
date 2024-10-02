@@ -84,7 +84,7 @@ const Search = () => {
           }
         />
       </div>
-      <div className="flex flex-col gap-4">
+      <div className="recipe-information flex flex-col gap-4">
         {filteredRecipes?.length > 0 ? (
           filteredRecipes?.map((recipe) => (
             <RecipeInformation
