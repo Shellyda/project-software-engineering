@@ -8,7 +8,7 @@ import LinkButton from '../LinkButton';
 type GreetingProps = {
   isAuthenticated: boolean;
   title: string;
-  userImage?: string;
+  userImage?: string | null;
   disableSuffix?: boolean;
 };
 
@@ -36,9 +36,11 @@ const Greeting: React.FC<GreetingProps> = ({
 
       {!disableSuffix && (
         <div className="ml-4">
-          {isAuthenticated && userImage ? (
+          {isAuthenticated ? (
             <Image
-              src={userImage}
+              src={
+                userImage || 'https://icons.veryicon.com/png/o/internet--web/prejudice/user-128.png'
+              }
               alt="Profile Picture"
               width={50}
               height={50}

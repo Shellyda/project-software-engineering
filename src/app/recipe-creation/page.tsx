@@ -135,7 +135,7 @@ const CreateRecipe: React.FC = () => {
   return (
     <div>
       <BaseLayout>
-        <Greeting title="Criar" isAuthenticated={false} disableSuffix />
+        <Greeting title="Criar" isAuthenticated disableSuffix />
         <div className="flex flex-col h-screen">
           <form onSubmit={handleSubmit} className="w-full max-w-lg mx-auto">
             <div className="mb-4 mt-2">

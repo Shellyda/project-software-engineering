@@ -1,4 +1,5 @@
 'use client';
+import { useAuth } from '@/hooks/useAuth';
 import { XCircleIcon, MagnifyingGlassIcon } from '@heroicons/react/24/solid';
 import React, { useState } from 'react';
 
@@ -9,6 +10,7 @@ import { BaseLayout } from '@/components/templates/BaseLayout';
 
 const Search = () => {
   const [searchValue, setSearchValue] = useState('');
+  const { user } = useAuth();
 
   const handleClearInput = () => {
     setSearchValue('');
@@ -74,7 +76,7 @@ const Search = () => {
     <BaseLayout>
       <Greeting
         title="Encontre"
-        isAuthenticated={true}
+        isAuthenticated={!!user?.id}
         userImage="https://plus.unsplash.com/premium_photo-1673792686302-7555a74de717?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OXx8Z2lybHxlbnwwfHwwfHx8MA%3D%3D"
       />
       <div className="my-4">

@@ -22,7 +22,7 @@ const Slider: React.FC<SliderProps> = ({ children }) => {
     <>
       <div
         ref={sliderRef}
-        className="overflow-x-auto max-w-screen-lg mx-auto scrollbar-hidden" // Ensures the slider fits the screen size
+        className="overflow-x-auto min-h-fit-content max-w-screen-lg mx-auto scrollbar-hidden" // Ensures the slider fits the screen size
         style={{ height: `${sliderHeight}px` }} // Dynamically sets height
         aria-label="region"
         role="region"

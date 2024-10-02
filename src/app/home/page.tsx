@@ -1,7 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
+import { useAuth } from '@/hooks/useAuth';
+import { useSupabase } from '@/hooks/useSupabase';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
 import Greeting from '@/components/atoms/Greeting';
 import LinkButton from '@/components/atoms/LinkButton';
@@ -238,9 +241,12 @@ const suggestedRecipes = [
 
 const HomePage = () => {
   const router = useRouter();
+  const { user } = useAuth();
+  const supabase = useSupabase();
+  const [userImage, setUserImage] = useState<string | null>(null); // State for user image
 
   const handleClickRecipe = (event: any, recipe: Recipe) => {
-    event.preventDefault(); // Evitar o comportamento padrão do botão, se necessário
+    event.preventDefault(); // Prevent default button behavior
 
     const query = new URLSearchParams({
       recipe_name: recipe.title,
@@ -252,16 +258,43 @@ const HomePage = () => {
       instructions: 'Cozinhe tudo por 80 minutos e vai ser isso mesmo.'
     }).toString();
 
-    router.push(`/receita/${recipe.recipeId}?${query}`); // Redireciona para a página de detalhes
+    router.push(`/receita/${recipe.recipeId}?${query}`); // Redirect to recipe details page
   };
+
+  const getUserImage = async () => {
+    if (!user?.id) return;
+
+    try {
+      const { data: profile, error } = await supabase
+        .from('profile')
+        .select('profile_picture') // Select the image field
+        .eq('id', user.id) // Filter by user id
+        .single(); // Get a single record
+
+      if (error) {
+        console.error('Error fetching user image:', error);
+
+        return;
+      }
+
+      setUserImage(profile?.profile_picture); // Set the user's image in state
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  // Call getUserImage when the component mounts
+  useEffect(() => {
+    getUserImage();
+  }, [user]);
 
   return (
     <div>
       <BaseLayout>
         <Greeting
           title="Olá, Chef"
-          isAuthenticated={true}
-          userImage="https://plus.unsplash.com/premium_photo-1673792686302-7555a74de717?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OXx8Z2lybHxlbnwwfHwwfHx8MA%3D%3D"
+          isAuthenticated={!!user?.id}
+          userImage={userImage} // Use user image from state
         />
         <div className="my-4">
           <Slider>

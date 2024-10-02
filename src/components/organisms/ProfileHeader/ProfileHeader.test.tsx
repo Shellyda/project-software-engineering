@@ -9,7 +9,9 @@ describe('ProfileHeader Component', () => {
     username: 'anamaria',
     email: 'anamaria@gmail.com',
     profileImage: '/path/to/profile.jpg',
-    onEdit: mockEdit
+    isMyProfile: true,
+    onEdit: mockEdit,
+    logout: mockEdit
   };
 
   test('renders the profile image', () => {

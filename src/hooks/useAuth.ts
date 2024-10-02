@@ -1,4 +1,5 @@
 import { Session, User } from '@supabase/supabase-js';
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 import { supabase } from './supabaseClient';
@@ -6,6 +7,8 @@ import { supabase } from './supabaseClient';
 export const useAuth = () => {
   const [session, setSession] = useState<Session | null>(null);
   const [user, setUser] = useState<User | null>(null);
+
+  const router = useRouter();
 
   useEffect(() => {
     // Function to get the initial session
@@ -38,6 +41,8 @@ export const useAuth = () => {
 
   const logout = async () => {
     const { error } = await supabase.auth.signOut();
+
+    router.push('/home');
 
     return { error };
   };

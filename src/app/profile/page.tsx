@@ -1,7 +1,9 @@
 'use client';
 
+import { useAuth } from '@/hooks/useAuth';
+import { useSupabase } from '@/hooks/useSupabase';
 import { useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 
 import SuggestedReceipe from '@/components/atoms/SuggestedReceipe';
 import ProfileHeader from '@/components/organisms/ProfileHeader';
@@ -10,10 +12,53 @@ import { BaseLayout } from '@/components/templates/BaseLayout';
 
 import RecipeInformation from '../../components/atoms/RecipeInformation';
 
+type UserProfile = {
+  id: string;
+  display_name: string;
+  email: string;
+  profile_picture: string;
+  created_at: string; // You can also use Date if you prefer parsing the timestamp
+};
+
 const Profile = () => {
   const searchParams = useSearchParams();
+  const supabase = useSupabase();
+  const { user, logout } = useAuth();
 
   const [activeTab, setActiveTab] = useState('Seu feed');
+  const [userData, setuserData] = useState<UserProfile | null>(null);
+
+  const userId = searchParams.get('user_id');
+  const isMyProfile = userId === null;
+
+  const getUserData = useCallback(async () => {
+    // Ensure user or userId is available
+    const id = userId || user?.id;
+    if (!id) return; // If neither are available, exit early
+
+    try {
+      const { data: profile, error } = await supabase
+        .from('profile')
+        .select()
+        .eq('id', id) // Use the correct id (either the current user's id or the query param userId)
+        .single();
+
+      if (error) {
+        console.error('Error fetching user image:', error);
+
+        return;
+      }
+
+      setuserData(profile); // Ensure correct column name for profile image
+    } catch (err) {
+      console.error('Error in getUserImage:', err);
+    }
+  }, [supabase, user?.id, userId]);
+
+  // Call getUserImage when the component mounts
+  useEffect(() => {
+    getUserData();
+  }, [getUserData, user, userId]);
 
   useEffect(() => {
     const tab = searchParams.get('tab');
@@ -23,8 +68,6 @@ const Profile = () => {
       setActiveTab('Seu feed');
     }
   }, [searchParams]);
-
-  const isMyProfile = true;
 
   const feedRecipes = [
     {
@@ -221,13 +264,17 @@ const Profile = () => {
   return (
     <div>
       <BaseLayout>
-        <ProfileHeader
-          onEdit={() => null}
-          name="Ana Maria"
-          email="anamaria@gmail.com"
-          username="lorojose"
-          profileImage="https://plus.unsplash.com/premium_photo-1673792686302-7555a74de717?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OXx8Z2lybHxlbnwwfHwwfHx8MA%3D%3D"
-        />
+        {userData?.profile_picture && (
+          <ProfileHeader
+            onEdit={() => null}
+            logout={logout}
+            isMyProfile={isMyProfile && !!user?.id}
+            name={userData?.display_name}
+            email={userData?.email}
+            username={userData?.display_name}
+            profileImage={userData?.profile_picture}
+          />
+        )}
         <SwitchTabs tabs={tabs} activeTab={activeTab} />
       </BaseLayout>
     </div>

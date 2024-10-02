@@ -57,7 +57,7 @@ const RecipePage = () => {
     <BaseLayout>
       <Greeting
         title={isUserRecipe ? 'Sua receita' : 'Me passa aí!'}
-        isAuthenticated={true}
+        isAuthenticated={!!user?.id}
         userImage={recipeImage as string}
       />
       {isUserRecipe && (
