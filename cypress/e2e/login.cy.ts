@@ -25,28 +25,11 @@ describe('Login Page', () => {
   });
 
   it('should redirect to home on successful login', () => {
-    cy.intercept('POST', login_url, {
-      statusCode: 200,
-      body: { access_token: 'mock_token' }
-    }).as('loginRequest');
-
     cy.get('input[name="email"]').type('josebasiliosilvaneto@gmail.com'); // Type in a valid email
     cy.get('input[name="password"]').type('abcde'); // Type in a valid password
     cy.get('button[type="submit"]').click(); // Submit the form
 
-    cy.wait('@loginRequest');
-
-    cy.wait(5000);
+    cy.wait(2000);
     cy.url().should('include', '/home'); // Adjust the path to your home route
   });
-
-  // it('should show a validation error for an invalid email format', () => {
-  //   cy.get('input[name="email"]').type('invalid-email'); // Type in an invalid email format
-  //   cy.get('input[name="password"]').type('validPassword'); // Type in a valid password
-
-  //   cy.get('button[type="submit"]').should('be.disabled'); // Submit button should be disabled
-
-  //   cy.get('input[name="email"]').clear().type(''); // Clear email input
-  //   cy.get('button[type="submit"]').should('be.disabled'); // Submit button should still be disabled
-  // });
 });
