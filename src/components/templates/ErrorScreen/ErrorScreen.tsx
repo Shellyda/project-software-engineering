@@ -16,9 +16,9 @@ const ErrorScreen = ({ onClick }: ErrorScreenProps) => {
       alignItems="center"
       justifyContent="center"
       flexDirection="column"
-      data-testid="error-container"
+      data-testid="error-screen"
     >
-      <VStack spacing={5} gap={16}>
+      <VStack spacing={5} gap={16} data-testid="error-container">
         <ErrorIcon height={140} width={140} />
         <Text fontSize="48px" fontWeight="bold" color="black">
           Ops!

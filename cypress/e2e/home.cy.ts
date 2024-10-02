@@ -8,22 +8,6 @@ describe('HomePage', () => {
     cy.visit('localhost:3000/home');
   });
 
-  //   it('displays the greeting and user image when authenticated', () => {
-  //     // Mock the authenticated user
-  //     cy.intercept('GET', '/api/auth/session', {
-  //       fixture: 'session.json' // Assuming you have a session.json fixture
-  //     }).as('getSession');
-
-  //     // Wait for the session to load
-  //     cy.wait('@getSession');
-
-  //     // Check if the greeting is displayed
-  //     cy.contains('Olá, Chef').should('be.visible');
-
-  //     // Check if user image is displayed (use the expected image URL)
-  //     cy.get('img').should('have.attr', 'src', 'https://your.expected.image.url');
-  //   });
-
   it('renders recipe cards', () => {
     // Mock the recipe data
     cy.intercept('GET', api_fetch).as('getRecipes');

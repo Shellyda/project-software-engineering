@@ -32,6 +32,8 @@ export const useAuth = () => {
     const { error } = await supabase.auth.signOut();
     if (error) throw new Error(error.message);
     router.push('/home');
+
+    return { error };
   };
 
   const signUp = async (email: string, password: string) => {

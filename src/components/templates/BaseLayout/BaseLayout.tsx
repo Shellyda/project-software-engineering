@@ -1,9 +1,9 @@
-import { useAuth } from '@/hooks/useAuth';
 import { useRouter } from 'next/navigation';
 import { ReactNode, useEffect } from 'react';
 
 import { Menu } from '@/components/molecules/Menu';
 
+import { useAuth } from '../../../hooks/useAuth';
 import ErrorScreen from '../ErrorScreen/ErrorScreen';
 import { LoadingScreen } from '../LoadingScreen';
 

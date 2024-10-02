@@ -1,53 +1,60 @@
 import { render, screen } from '@testing-library/react';
+import { useRouter } from 'next/navigation';
 
+import { useAuth } from '../../../hooks/useAuth';
 import { BaseLayout } from './BaseLayout';
 
+jest.mock('../../../hooks/useAuth');
+jest.mock('next/navigation', () => ({
+  useRouter: jest.fn()
+}));
 jest.mock('@/components/molecules/Menu', () => ({
-  Menu: () => <div data-testid="mock-menu">Menu</div>
+  Menu: () => <div data-testid="menu">menu</div>
 }));
 
-describe('BaseLayout Component', () => {
-  it('renders children correctly', () => {
-    render(
-      <BaseLayout>
-        <div data-testid="child-content">Child Content</div>
-      </BaseLayout>
-    );
+describe('BaseLayout', () => {
+  const mockRouter = {
+    push: jest.fn()
+  };
 
-    expect(screen.getByTestId('child-content')).toBeInTheDocument();
+  beforeEach(() => {
+    (useRouter as jest.Mock).mockReturnValue(mockRouter);
   });
 
-  it('renders the Menu component', () => {
-    render(
-      <BaseLayout>
-        <div>Test Child</div>
-      </BaseLayout>
-    );
-
-    expect(screen.getByTestId('mock-menu')).toBeInTheDocument();
+  afterEach(() => {
+    jest.clearAllMocks();
   });
 
-  it('applies className correctly', () => {
-    render(
-      <BaseLayout className="px-4 py-4 pb-20 bg-base flex-1 min-h-screen w-full max-w-full overflow-x-hidden">
-        <div>Test Child</div>
-      </BaseLayout>
-    );
+  it('should show loading screen when isLoading is true', () => {
+    (useAuth as jest.Mock).mockReturnValue({ isLoading: true, user: null });
 
-    expect(screen.getByRole('main')).toHaveClass(
-      'px-4 py-4 pb-20 bg-base flex-1 min-h-screen w-full max-w-full overflow-x-hidden'
-    );
+    render(<BaseLayout>Test Content</BaseLayout>);
+
+    expect(screen.getByTestId('loading-screen')).toBeInTheDocument();
   });
 
-  it('renders with default styles', () => {
-    render(
-      <BaseLayout>
-        <div>Test Child</div>
-      </BaseLayout>
-    );
+  it('should redirect to /search when user is null and isLoading is false', () => {
+    (useAuth as jest.Mock).mockReturnValue({ isLoading: false, user: null });
 
-    expect(screen.getByRole('main')).toHaveClass(
-      'px-4 py-4 pb-20 bg-base flex-1 min-h-screen w-full max-w-full overflow-x-hidden'
-    );
+    render(<BaseLayout>Test Content</BaseLayout>);
+
+    expect(mockRouter.push).toHaveBeenCalledWith('/search');
+  });
+
+  it('should show error screen when there is an error', () => {
+    (useAuth as jest.Mock).mockReturnValue({ isLoading: false, isError: true });
+
+    render(<BaseLayout>Test Content</BaseLayout>);
+
+    expect(screen.getByTestId('error-screen')).toBeInTheDocument();
+  });
+
+  it('should render children and Menu when user is present', () => {
+    (useAuth as jest.Mock).mockReturnValue({ isLoading: false, user: { name: 'Test User' } });
+
+    render(<BaseLayout>Test Content</BaseLayout>);
+
+    expect(screen.getByText('Test Content')).toBeInTheDocument();
+    expect(screen.getByTestId('menu')).toBeInTheDocument();
   });
 });
