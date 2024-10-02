@@ -212,7 +212,7 @@ const Profile = () => {
   return (
     <div>
       <BaseLayout>
-        {userData?.display_name && (
+        {userData?.email && (
           <ProfileHeader
             onEdit={() => router.push('/edit')}
             logout={logout}
