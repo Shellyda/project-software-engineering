@@ -166,7 +166,7 @@ const Profile = () => {
               key={recipe.recipe_id}
               initialRating={recipe.rating}
               time={recipe.preparation_time || 0}
-              type="Vegano"
+              type={recipe.categories[0]}
               recipeImage={recipe.picture}
               name={recipe.title}
               date={format(new Date(recipe.published_date), 'dd/MM/yyyy')}

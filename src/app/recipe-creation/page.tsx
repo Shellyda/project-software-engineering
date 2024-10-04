@@ -35,6 +35,7 @@ const CreateRecipe: React.FC = () => {
   const [prepTime, setPrepTime] = useState<number>(0);
   const [uploadError, setUploadError] = useState<string | null>(null);
   const [userData, setUserData] = useState<UserProfile | null>(null);
+  const [createLoading, setCreateLoading] = useState(false);
 
   // Function to check if all form fields are filled
   const isFormValid = (): boolean => {
@@ -111,12 +112,14 @@ const CreateRecipe: React.FC = () => {
   // Handler for form submission
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setCreateLoading(true);
     if (!isFormValid()) return;
 
     if (!user?.id) return;
 
     if (!imageFile) {
       setUploadError('Please select an image file before submitting.');
+      setCreateLoading(false);
 
       return;
     }
@@ -132,6 +135,7 @@ const CreateRecipe: React.FC = () => {
 
       if (error) {
         setUploadError(error.message);
+        setCreateLoading(false);
 
         return;
       }
@@ -170,6 +174,8 @@ const CreateRecipe: React.FC = () => {
     } catch (err) {
       setUploadError('An unexpected error occurred. Please try again.');
       console.error(err);
+    } finally {
+      setCreateLoading(false);
     }
   };
 
@@ -320,10 +326,11 @@ const CreateRecipe: React.FC = () => {
             variant="default"
             className={`w-full mb-20 py-2 px-4 rounded-md transition-colors duration-300 ${
               isFormValid()
-                ? 'bg-black-primary text-white hover:bg-blue-600'
+                ? 'bg-black-primary text-white'
                 : 'bg-gray-300 text-gray-500 cursor-not-allowed'
             }`}
-            disabled={!isFormValid()} // Disable the button if the form is not valid
+            disabled={!isFormValid()}
+            loading={createLoading}
           >
             Criar Receita
           </Button>

@@ -32,6 +32,7 @@ const Edit = () => {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [uploadError, setUploadError] = useState<string | null>(null);
   const [isModified, setIsModified] = useState<boolean>(false);
+  const [handleEdit, setHandleEdit] = useState(false);
 
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -52,6 +53,7 @@ const Edit = () => {
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setHandleEdit(true);
     if (!isFormValid() || !isModified) return;
 
     if (!user?.id) return;
@@ -99,6 +101,8 @@ const Edit = () => {
       router.push('/profile');
     } catch (err) {
       console.error('Error updating profile:', err);
+    } finally {
+      setHandleEdit(false);
     }
   };
 
@@ -213,11 +217,12 @@ const Edit = () => {
             style={{ marginTop: '16px', width: '100%' }}
             className={`w-full mb-20 py-2 px-4 rounded-md transition-colors duration-300 ${
               isModified
-                ? 'bg-black-primary text-white hover:bg-blue-600'
+                ? 'bg-black-primary text-white'
                 : 'bg-gray-300 text-gray-500 cursor-not-allowed'
             }`}
             variant="default"
             disabled={!isModified}
+            loading={handleEdit}
           >
             Salvar alterações
           </Button>

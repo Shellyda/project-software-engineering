@@ -88,7 +88,7 @@ const Search = () => {
               initialRating={recipe.rating}
               time={recipe.preparation_time}
               recipeImage={recipe.picture}
-              type="Vegano"
+              type={recipe.categories[0]}
               name={recipe.title}
               date={format(new Date(recipe.published_date), 'dd/MM/yyyy')}
               tags={recipe.categories}

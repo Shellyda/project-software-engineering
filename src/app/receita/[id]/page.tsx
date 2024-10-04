@@ -41,6 +41,7 @@ const RecipePage = () => {
   const userImage = searchParams.get('user_image');
 
   const [ratingValue, setRatingValue] = useState<number | null>(null);
+  const [deleteLoading, setDeleteLoading] = useState(false);
   const isButtonEnabled = ratingValue !== null;
 
   const handleVote = (rating: number) => {
@@ -59,11 +60,15 @@ const RecipePage = () => {
 
   const deleteRecipe = async () => {
     if (!id) return;
+    setDeleteLoading(true);
 
     try {
       await supabase.from('recipe').delete().eq('id', id);
     } catch (err) {
       alert(err);
+    } finally {
+      setDeleteLoading(false);
+      router.push('/profile');
     }
   };
 
@@ -216,6 +221,7 @@ const RecipePage = () => {
           style={{ width: '100%', height: '50px', background: '#e80d0d', color: 'white' }}
           className="mt-4 w-full mb-6 py-2 px-4 rounded-md"
           onClick={deleteRecipe}
+          loading={deleteLoading}
         >
           Deletar receita
         </Button>
