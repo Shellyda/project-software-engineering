@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 
-import { supabase } from './supabaseClient';
+import { supabase } from '../lib/declarations/supabaseClient';
 
 const fetchSession = async () => {
   const { data, error } = await supabase.auth.getSession();
