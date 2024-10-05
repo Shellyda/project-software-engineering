@@ -47,6 +47,8 @@ Our platform aims to create a vibrant community of food enthusiasts who can disc
 - [yarn](https://yarnpkg.com/)
 - [Supabase](https://supabase.com/) account
 
+**obs.:** you can choose `npm` or `pnpm` to run scripts instead `yarn` too
+
 ## Installation
 
 To run the platform locally, follow these steps:
@@ -74,8 +76,6 @@ To run the platform locally, follow these steps:
 
    - Navigate to `http://localhost:3000` for the frontend.
   
-**obs.:** you can choose `npm` or `pnpm` to run scripts instead `yarn` too
-
 ## Usage
 
 Once the platform is up and running, you can start exploring recipes, post your own, and interact with other users. Make sure to create an account to unlock all features.
