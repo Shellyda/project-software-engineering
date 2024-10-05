@@ -33,21 +33,21 @@ Our platform aims to create a vibrant community of food enthusiasts who can disc
 - **Rating System:** Rate recipes to help highlight the best ones in the community.
 - **User Profiles:** Each user has a profile where they can manage their shared recipes, comments, and ratings.
 - **Recipe Categories:** Browse recipes by categories such as desserts, main courses, appetizers, etc.
-- **Search Functionality:** Easily find recipes based on ingredients, titles, or categories. 🚧
+- **Search Functionality:** Easily find recipes based on ingredients, titles, or categories. 
 
 ## Tech Stack
 
 - **Frontend:** [Next.js](https://nextjs.org/)
-- **Backend:** [NestJS](https://nestjs.com/) 🚧
-- **Database:** _(e.g., PostgreSQL, MongoDB)_ 🚧
-- **Authentication:** _(e.g., JWT, OAuth)_ 🚧
-- **Hosting:** _(e.g., Vercel for frontend, AWS for backend)_ 🚧
+- **Backend:** [Supabase](https://supabase.com/) - for database, authentication, and real-time API.
+- **Database:** [Supabase](https://supabase.com/) (PostgreSQL) for the backend API.
+- **Authentication:** Supabase Auth (OAuth, Magic Links, etc.)
+- **Hosting:** [Vercel](https://vercel.com/) for frontend, [Supabase](https://supabase.com/) for backend.
 
 ## Prerequisites
 
 - [Node.js](https://nodejs.org/)
 - [yarn](https://yarnpkg.com/)
-- PostgreSQL (or your preferred database)
+- [Supabase](https://supabase.com/) account
 
 ## Installation
 
@@ -60,34 +60,23 @@ To run the platform locally, follow these steps:
    cd project-software-engineering
    ```
 
-2. **Install dependencies for the frontend and backend:**
+2. **Install dependencies:**
 
    ```bash
-   # For frontend
-   cd frontend
-   yarn install
-
-   # For backend
-   cd backend
    yarn install
    ```
 
 3. **Start the development servers:**
 
    ```bash
-   # For frontend
-   cd frontend
    yarn run dev
-
-   # For backend
-   cd backend
-   yarn run start:dev
    ```
 
 4. **Access the platform:**
 
    - Navigate to `http://localhost:3000` for the frontend.
-   - Backend API will be running on `http://localhost:4000`.
+  
+**obs.:** you can choose `npm` or `pnpm` to run scripts instead `yarn` too
 
 ## Usage
 
