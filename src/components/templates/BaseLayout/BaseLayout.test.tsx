@@ -8,11 +8,26 @@ jest.mock('../../../hooks/useAuth');
 jest.mock('next/navigation', () => ({
   useRouter: jest.fn()
 }));
+
 jest.mock('@/components/molecules/Menu', () => ({
   Menu: () => <div data-testid="menu">menu</div>
 }));
 
+jest.mock('@/lib/declarations/supabaseClient', () => ({
+  createClient: jest.fn().mockReturnValue({
+    auth: {
+      user: jest.fn().mockReturnValue({}),
+      signOut: jest.fn()
+    }
+  })
+}));
+
 describe('BaseLayout', () => {
+  beforeAll(() => {
+    process.env.NEXT_PUBLIC_SUPABASE_URL = 'http://localhost:54321';
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY = 'your_test_anon_key';
+  });
+
   const mockRouter = {
     push: jest.fn()
   };
