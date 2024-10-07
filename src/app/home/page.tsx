@@ -46,10 +46,10 @@ const HomePage = () => {
       user_name: recipe.published_by,
       user_image:
         recipe?.published_by_profile_picture ||
-        'https://icons.veryicon.com/png/o/internet--web/prejudice/user-128.png',
-      ingredients:
-        'Prepare o arroz, o feijão e o macarrão alem de de tudo e muito mais que isso testando palavras aleatorias pois me prometeram um autoresize então se promoteram ainda terá Prepare o arroz, o feijão e o macarrão alem de de tudo e muito mais que isso testando palavras aleatorias pois me prometeram um autoresize então se promoteram ainda terá',
-      instructions: 'Cozinhe tudo por 80 minutos e vai ser isso mesmo.'
+        'https://icons.veryicon.com/png/o/internet--web/prejudice/user-128.png'
+      // ingredients:
+      //   'Prepare o arroz, o feijão e o macarrão alem de de tudo e muito mais que isso testando palavras aleatorias pois me prometeram um autoresize então se promoteram ainda terá Prepare o arroz, o feijão e o macarrão alem de de tudo e muito mais que isso testando palavras aleatorias pois me prometeram um autoresize então se promoteram ainda terá',
+      // instructions: 'Cozinhe tudo por 80 minutos e vai ser isso mesmo.'
     }).toString();
 
     router.push(`/receita/${recipe.recipe_id}?${query}`); // Redirect to recipe details page

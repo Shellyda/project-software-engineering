@@ -24,7 +24,7 @@ describe('Search Component', () => {
     cy.get('input[placeholder="Pesquise receitas..."]').type('Bolo de cenoura');
 
     cy.get('.recipe-information').each(($el) => {
-      cy.wrap($el).contains('Bolo de cenoura');
+      cy.wrap($el).find('h2').should('contain.text', 'Bolo de Cenoura II');
     });
   });
 
