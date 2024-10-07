@@ -64,15 +64,14 @@ const Profile = () => {
   const isMyProfile = userId === null;
 
   const getUserData = useCallback(async () => {
-    // Ensure user or userId is available
     const id = userId || user?.id;
-    if (!id) return; // If neither are available, exit early
+    if (!id) return;
 
     try {
       const { data: profile, error } = await supabase
         .from('profile')
         .select()
-        .eq('id', id) // Use the correct id (either the current user's id or the query param userId)
+        .eq('id', id)
         .single();
 
       if (error) {
@@ -81,7 +80,7 @@ const Profile = () => {
         return;
       }
 
-      setuserData(profile); // Ensure correct column name for profile image
+      setuserData(profile);
     } catch (err) {
       console.error('Error in getUserImage:', err);
     }
@@ -159,10 +158,12 @@ const Profile = () => {
   const tabs = [
     {
       title: 'Seu feed',
+      id: 'tab-seu-feed',
       content: (
         <div className="flex flex-col gap-4">
           {recipeData?.map((recipe) => (
             <RecipeInformation
+              data-testid="recipe-information"
               key={recipe.recipe_id}
               initialRating={recipe.rating}
               time={recipe.preparation_time || 0}
@@ -182,11 +183,13 @@ const Profile = () => {
       ? [
           {
             title: 'Reviews',
+            id: 'tab-reviews',
             content: (
               <div>
                 {suggestedRecipes?.map((receipe) => (
                   <div key={receipe.recipe_name} className="mt-4">
                     <SuggestedReceipe
+                      data-testid="suggested-receipe"
                       key={receipe.recipe_id}
                       title={receipe.recipe_name}
                       initialRating={receipe.rating}

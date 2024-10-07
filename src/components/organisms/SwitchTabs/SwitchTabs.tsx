@@ -7,6 +7,7 @@ interface SwitchTabsProps {
     title: string;
     content: React.ReactNode;
     path: string;
+    id: string;
   }[];
   activeTab: string;
 }
@@ -40,6 +41,7 @@ const SwitchTabs: React.FC<SwitchTabsProps> = ({ tabs, activeTab }) => {
               fontSize="xs"
               px={6}
               py={2}
+              data-testid={tab.id}
               borderRadius="md"
               className="text-sm rounded-md bg-beige-ds px-4"
             >

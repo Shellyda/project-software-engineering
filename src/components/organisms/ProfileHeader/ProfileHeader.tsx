@@ -25,7 +25,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({
   logout
 }) => {
   return (
-    <div className="flex flex-col items-center p-6 bg-transparent">
+    <div className="profile-header flex flex-col items-center p-6 bg-transparent">
       {/* Profile Image */}
       {isMyProfile && (
         <ArrowLeftStartOnRectangleIcon
