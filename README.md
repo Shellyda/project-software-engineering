@@ -31,7 +31,7 @@ Our platform aims to create a vibrant community of food enthusiasts who can disc
 - **Rating System:** Rate recipes to help highlight the best ones in the community.
 - **User Profiles:** Each user has a profile where they can manage their shared recipes, comments, and ratings.
 - **Recipe Categories:** Browse recipes by categories such as desserts, main courses, appetizers, etc.
-- **Search Functionality:** Easily find recipes based on ingredients, titles, or categories. 
+- **Search Functionality:** Easily find recipes based on ingredients, titles, or categories.
 
 ## Tech Stack
 
@@ -75,7 +75,7 @@ To run the platform locally, follow these steps:
 4. **Access the platform:**
 
    - Navigate to `http://localhost:3000` for the frontend.
-  
+
 ## Usage
 
 Once the platform is up and running, you can start exploring recipes, post your own, and interact with other users. Make sure to create an account to unlock all features.
