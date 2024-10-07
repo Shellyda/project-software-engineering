@@ -1,9 +1,10 @@
 'use client';
 import { useAuth } from '@/hooks/useAuth';
 import { useSupabase } from '@/hooks/useSupabase';
-import { XCircleIcon, MagnifyingGlassIcon } from '@heroicons/react/24/solid';
+import { MagnifyingGlassIcon, XCircleIcon } from '@heroicons/react/24/solid';
 import { format } from 'date-fns';
-import React, { useState, useEffect, useCallback } from 'react';
+import { useRouter } from 'next/navigation';
+import { MouseEvent, useCallback, useEffect, useState } from 'react';
 
 import Greeting from '@/components/atoms/Greeting';
 import RecipeInformation from '@/components/atoms/RecipeInformation';
@@ -28,6 +29,7 @@ const Search = () => {
   const [searchValue, setSearchValue] = useState('');
   const [feedRecipes, setFeedRecipes] = useState<RecipeData[]>([]); // State for storing recipe data
   const { user } = useAuth();
+  const router = useRouter();
   const supabase = useSupabase(); // Get Supabase instance
 
   const handleClearInput = () => {
@@ -59,6 +61,28 @@ const Search = () => {
   const filteredRecipes = feedRecipes?.filter((recipe) =>
     recipe?.title?.toLowerCase().includes(searchValue.toLowerCase())
   );
+
+  const handleClickRecipe = (
+    event: MouseEvent<HTMLDivElement, globalThis.MouseEvent>,
+    recipe: RecipeData
+  ) => {
+    event.preventDefault(); // Prevent default button behavior
+
+    const query = new URLSearchParams({
+      recipe_name: recipe.title,
+      recipe_image: recipe.picture,
+      recipe_rating: recipe.rating?.toString(),
+      user_name: recipe.published_by,
+      user_image:
+        recipe?.published_by_profile_picture ||
+        'https://icons.veryicon.com/png/o/internet--web/prejudice/user-128.png',
+      ingredients:
+        'Prepare o arroz, o feijão e o macarrão alem de de tudo e muito mais que isso testando palavras aleatorias pois me prometeram um autoresize então se promoteram ainda terá Prepare o arroz, o feijão e o macarrão alem de de tudo e muito mais que isso testando palavras aleatorias pois me prometeram um autoresize então se promoteram ainda terá',
+      instructions: 'Cozinhe tudo por 80 minutos e vai ser isso mesmo.'
+    }).toString();
+
+    router.push(`/receita/${recipe.recipe_id}?${query}`); // Redirect to recipe details page
+  };
 
   return (
     <BaseLayout>
@@ -92,6 +116,7 @@ const Search = () => {
               name={recipe.title}
               date={format(new Date(recipe.published_date), 'dd/MM/yyyy')}
               tags={recipe.categories}
+              onClick={(event) => handleClickRecipe(event, recipe)}
             />
           ))
         ) : (
