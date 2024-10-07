@@ -13,9 +13,9 @@ export default meta;
 
 type Story = StoryObj<typeof SwitchTabs>;
 const tabs = [
-  { title: 'Tab 1', content: <p>Content for Tab 1</p>, path: 'tab1' },
-  { title: 'Tab 2', content: <p>Content for Tab 2</p>, path: 'tab2' },
-  { title: 'Tab 3', content: <p>Content for Tab 3</p>, path: 'tab3' }
+  { id: '0', title: 'Tab 1', content: <p>Content for Tab 1</p>, path: 'tab1' },
+  { id: '1', title: 'Tab 2', content: <p>Content for Tab 2</p>, path: 'tab2' },
+  { id: '2', title: 'Tab 3', content: <p>Content for Tab 3</p>, path: 'tab3' }
 ];
 
 export const Default: Story = {};
