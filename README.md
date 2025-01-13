@@ -24,6 +24,10 @@ Our platform aims to create a vibrant community of food enthusiasts who can disc
 
 **Me passa a receita aí?** platform allows users to explore a wide range of recipes shared by a community of food lovers. Users can contribute by sharing their own recipes, providing feedback through comments, and rating the recipes they try.
 
+### Design work 
+- [Figma Project](https://www.figma.com/design/EyvP26g5FvODnRLuW8YIkn/Receita.ai?node-id=0-1&t=pjLzGqzsqdiTv0yA-1)
+<img width="80%" alt="Screenshot 2025-01-13 at 10 57 18" src="https://github.com/user-attachments/assets/6d09611f-4a2a-42a9-9797-20ba7e25f560" />
+
 ## Features
 
 - **Recipe Sharing:** Users can create and share their recipes with the community.
